@@ -15,9 +15,9 @@ MonoBehaviour:
   m_DefaultGroup: 07a101a74fb1a1e4aade5020651afad0
   m_BuildRemoteCatalog: 0
   m_RemoteCatalogBuildPath:
-    m_Id: 
+    m_Id: d4baafab70c53914c95c4262aaf67daf
   m_RemoteCatalogLoadPath:
-    m_Id: 
+    m_Id: 50428ce257dd3f14fa5bc412d5d1e3ad
   m_overridePlayerVersion: 
   m_GroupAssets:
   - {fileID: 11400000, guid: 70dbc3423b6a3d749b86cbd7beb3404f, type: 2}

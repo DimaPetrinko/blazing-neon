@@ -35,13 +35,21 @@ namespace Input
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Looking"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""00959b11-6043-4d12-8e72-d51087180ad6"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""2485754b-da23-47e7-a448-9b6c245c4a0a"",
-                    ""path"": ""<Gamepad>/rightStick"",
+                    ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -173,11 +181,33 @@ namespace Input
                 {
                     ""name"": """",
                     ""id"": ""05ba1327-1b5e-485b-99e7-9558dd70856d"",
-                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""path"": ""<Gamepad>/buttonEast"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""44511995-dac1-4c40-8add-dc4f4fa92be7"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Looking"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3dc95a9c-04a4-41ed-a479-f556ff08caf6"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Looking"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -218,6 +248,7 @@ namespace Input
             m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
             m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
             m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
+            m_Player_Looking = m_Player.FindAction("Looking", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -269,12 +300,14 @@ namespace Input
         private IPlayerActions m_PlayerActionsCallbackInterface;
         private readonly InputAction m_Player_Movement;
         private readonly InputAction m_Player_Dash;
+        private readonly InputAction m_Player_Looking;
         public struct PlayerActions
         {
             private InputMaster m_Wrapper;
             public PlayerActions(InputMaster wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
+            public InputAction @Looking => m_Wrapper.m_Player_Looking;
             public InputActionMap Get() { return m_Wrapper.m_Player; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -290,6 +323,9 @@ namespace Input
                     Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                     Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
                     Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                    Looking.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
+                    Looking.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
+                    Looking.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
@@ -300,6 +336,9 @@ namespace Input
                     Dash.started += instance.OnDash;
                     Dash.performed += instance.OnDash;
                     Dash.canceled += instance.OnDash;
+                    Looking.started += instance.OnLooking;
+                    Looking.performed += instance.OnLooking;
+                    Looking.canceled += instance.OnLooking;
                 }
             }
         }
@@ -326,6 +365,7 @@ namespace Input
         {
             void OnMovement(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
+            void OnLooking(InputAction.CallbackContext context);
         }
     }
 }

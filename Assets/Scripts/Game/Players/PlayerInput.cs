@@ -1,9 +1,10 @@
 using System;
+using System.Linq;
 using Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Game
+namespace Game.Players
 {
 	public sealed class PlayerInput : MonoBehaviour
 	{
@@ -14,21 +15,27 @@ namespace Game
 		private InputMaster controls;
 
 		public Vector2 MovementDirection { get; private set; }
+		public Vector2 LookDirection { get; private set; }
 
 		private void Awake()
 		{
 			controls = new InputMaster();
 			controls.Player.Movement.performed += MovementPerformed;
 			controls.Player.Dash.performed += DashPerformed;
+			controls.Player.Looking.performed += LookingPerformed;
 		}
 
 		private void OnEnable() => controls.Enable();
+
 		private void OnDisable() => controls.Disable();
 
 		private void OnDestroy() => Dash = null;
 
 		private void MovementPerformed(InputAction.CallbackContext context) =>
 			MovementDirection = context.ReadValue<Vector2>();
+
+		private void LookingPerformed(InputAction.CallbackContext context) =>
+			LookDirection = context.ReadValue<Vector2>();
 
 		private void DashPerformed(InputAction.CallbackContext context)
 		{

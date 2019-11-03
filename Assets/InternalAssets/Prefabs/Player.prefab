@@ -59,11 +59,12 @@ GameObject:
   - component: {fileID: 6787032753006636106}
   - component: {fileID: 6787032753006636107}
   - component: {fileID: 6787032753006636105}
+  - component: {fileID: 6693146108326724440}
   - component: {fileID: 6787032753006636150}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5397416234189338067, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -164,6 +165,18 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &6693146108326724440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787032753006636151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07d7b85079b14d26ab021acd8dbb2f23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!50 &6787032753006636150
 Rigidbody2D:
   serializedVersion: 4
@@ -184,7 +197,7 @@ Rigidbody2D:
   m_Interpolate: 2
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 4
+  m_Constraints: 0
 --- !u!1 &6787032753364491515
 GameObject:
   m_ObjectHideFlags: 0

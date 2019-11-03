@@ -17,6 +17,10 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 07a101a74fb1a1e4aade5020651afad0
   m_SerializeEntries:
+  - m_GUID: 8f9f9434dbc4b5a4f9d2bd1d108ee357
+    m_Address: Prefabs/PlayerSquare
+    m_ReadOnly: 0
+    m_SerializedLabels: []
   - m_GUID: ea2bc035a68cb3c49bd0b9c3ea9e9b83
     m_Address: Prefabs/Player
     m_ReadOnly: 0

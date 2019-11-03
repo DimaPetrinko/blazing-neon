@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Game
+namespace Game.Players
 {
 	[RequireComponent(typeof(Rigidbody2D))]
 	public sealed class PlayerMovement : MonoBehaviour
