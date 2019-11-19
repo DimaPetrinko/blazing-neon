@@ -8,10 +8,10 @@ using UnityEngine.InputSystem.Utilities;
 
 namespace Input
 {
-    public class InputMaster : IInputActionCollection, IDisposable
+    public class @InputMaster : IInputActionCollection, IDisposable
     {
         private InputActionAsset asset;
-        public InputMaster()
+        public @InputMaster()
         {
             asset = InputActionAsset.FromJson(@"{
     ""name"": ""InputMaster"",
@@ -303,8 +303,8 @@ namespace Input
         private readonly InputAction m_Player_Looking;
         public struct PlayerActions
         {
-            private InputMaster m_Wrapper;
-            public PlayerActions(InputMaster wrapper) { m_Wrapper = wrapper; }
+            private @InputMaster m_Wrapper;
+            public PlayerActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
             public InputAction @Movement => m_Wrapper.m_Player_Movement;
             public InputAction @Dash => m_Wrapper.m_Player_Dash;
             public InputAction @Looking => m_Wrapper.m_Player_Looking;
@@ -317,28 +317,28 @@ namespace Input
             {
                 if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
                 {
-                    Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                    Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                    Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                    Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                    Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                    Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
-                    Looking.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
-                    Looking.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
-                    Looking.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
+                    @Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                    @Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                    @Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
+                    @Dash.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                    @Dash.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                    @Dash.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDash;
+                    @Looking.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
+                    @Looking.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
+                    @Looking.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnLooking;
                 }
                 m_Wrapper.m_PlayerActionsCallbackInterface = instance;
                 if (instance != null)
                 {
-                    Movement.started += instance.OnMovement;
-                    Movement.performed += instance.OnMovement;
-                    Movement.canceled += instance.OnMovement;
-                    Dash.started += instance.OnDash;
-                    Dash.performed += instance.OnDash;
-                    Dash.canceled += instance.OnDash;
-                    Looking.started += instance.OnLooking;
-                    Looking.performed += instance.OnLooking;
-                    Looking.canceled += instance.OnLooking;
+                    @Movement.started += instance.OnMovement;
+                    @Movement.performed += instance.OnMovement;
+                    @Movement.canceled += instance.OnMovement;
+                    @Dash.started += instance.OnDash;
+                    @Dash.performed += instance.OnDash;
+                    @Dash.canceled += instance.OnDash;
+                    @Looking.started += instance.OnLooking;
+                    @Looking.performed += instance.OnLooking;
+                    @Looking.canceled += instance.OnLooking;
                 }
             }
         }
