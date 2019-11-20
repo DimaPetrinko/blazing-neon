@@ -2,27 +2,35 @@
 
 namespace Game.Players
 {
+	public interface ICharacterController
+	{
+		IInputBehaviour InputBehaviour { get; }
+		IMovementBehaviour MovementBehaviour { get; }
+		ILookingBehaviour LookingBehaviour { get; }
+	}
+
 	[RequireComponent(typeof(PlayerInput))]
 	[RequireComponent(typeof(PlayerMovement))]
 	[RequireComponent(typeof(PlayerLooking))]
-	public sealed class Player : MonoBehaviour
+	public sealed class Player : TestableMonoBehaviour, ICharacterController
 	{
-		private PlayerInput playerInput;
-		private PlayerMovement playerMovement;
-		private PlayerLooking playerLooking;
+		public IInputBehaviour InputBehaviour { get; private set; }
+		public IMovementBehaviour MovementBehaviour { get; private set; }
+		public ILookingBehaviour LookingBehaviour { get; private set; }
 
-		private void Awake()
+
+		public override void Init()
 		{
-			playerInput = GetComponent<PlayerInput>();
-			playerMovement = GetComponent<PlayerMovement>();
-			playerLooking = GetComponent<PlayerLooking>();
-			playerInput.Dash += () => playerMovement.PerformDash(playerInput.MovementDirection);
+			InputBehaviour = GetComponent<PlayerInput>();
+			MovementBehaviour = GetComponent<PlayerMovement>();
+			LookingBehaviour = GetComponent<PlayerLooking>();
+			InputBehaviour.Dash += MovementBehaviour.PerformDash;
 		}
 
-		private void FixedUpdate()
+		public override void FixedUpdateMethod()
 		{
-			playerMovement.PerformMovement(playerInput.MovementDirection);
-			playerLooking.PerformLooking(playerInput.LookDirection);
+			MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
+			LookingBehaviour.PerformLooking(InputBehaviour.LookDirection);
 		}
 	}
 }

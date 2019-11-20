@@ -1,14 +1,20 @@
 using System;
-using System.Linq;
 using Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Game.Players
 {
-	public sealed class PlayerInput : MonoBehaviour
+	public interface IInputBehaviour
 	{
-		public event Action Dash;
+		event Action<Vector2> Dash;
+		Vector2 MovementDirection { get; }
+		Vector2 LookDirection { get; }
+	}
+
+	public sealed class PlayerInput : TestableMonoBehaviour, IInputBehaviour
+	{
+		public event Action<Vector2> Dash;
 
 		[SerializeField] private float dashSpeedThreshold;
 
@@ -17,7 +23,7 @@ namespace Game.Players
 		public Vector2 MovementDirection { get; private set; }
 		public Vector2 LookDirection { get; private set; }
 
-		private void Awake()
+		public override void Init()
 		{
 			controls = new InputMaster();
 			controls.Player.Movement.performed += MovementPerformed;
@@ -25,11 +31,10 @@ namespace Game.Players
 			controls.Player.Looking.performed += LookingPerformed;
 		}
 
-		private void OnEnable() => controls.Enable();
+		public override void Enabled() => controls.Enable();
+		public override void Disabled() => controls.Disable();
 
-		private void OnDisable() => controls.Disable();
-
-		private void OnDestroy() => Dash = null;
+		public override void Destroyed() => Dash = null;
 
 		private void MovementPerformed(InputAction.CallbackContext context) =>
 			MovementDirection = context.ReadValue<Vector2>();
@@ -39,7 +44,7 @@ namespace Game.Players
 
 		private void DashPerformed(InputAction.CallbackContext context)
 		{
-			if (MovementDirection.sqrMagnitude > dashSpeedThreshold) Dash?.Invoke();
+			if (MovementDirection.sqrMagnitude > dashSpeedThreshold) Dash?.Invoke(MovementDirection);
 		}
 	}
 }

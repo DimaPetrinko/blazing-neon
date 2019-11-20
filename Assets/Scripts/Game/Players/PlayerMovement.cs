@@ -3,8 +3,14 @@ using UnityEngine;
 
 namespace Game.Players
 {
+	public interface IMovementBehaviour
+	{
+		void PerformDash(Vector2 movementDirection);
+		void PerformMovement(Vector2 movementDirection);
+	}
+
 	[RequireComponent(typeof(Rigidbody2D))]
-	public sealed class PlayerMovement : MonoBehaviour
+	public sealed class PlayerMovement : TestableMonoBehaviour, IMovementBehaviour
 	{
 		[SerializeField] private float speed = 1f;
 		[SerializeField] private float maxDashSpeed = 1f;
@@ -19,7 +25,7 @@ namespace Game.Players
 
 		// TODO: stack of movement modes?
 
-		private void Awake() => rb = GetComponent<Rigidbody2D>();
+		public override void Init() => rb = GetComponent<Rigidbody2D>();
 
 		public void PerformDash(Vector2 movementDirection) => StartCoroutine(Dash(movementDirection));
 

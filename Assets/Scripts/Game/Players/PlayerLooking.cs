@@ -2,13 +2,18 @@ using UnityEngine;
 
 namespace Game.Players
 {
+	public interface ILookingBehaviour
+	{
+		void PerformLooking(Vector2 lookDirection);
+	}
+
 	[RequireComponent(typeof(Rigidbody2D))]
-	public sealed class PlayerLooking : MonoBehaviour
+	public sealed class PlayerLooking : TestableMonoBehaviour, ILookingBehaviour
 	{
 		private Rigidbody2D rb;
 		private Camera cam;
 
-		private void Awake()
+		public override void Init()
 		{
 			rb = GetComponent<Rigidbody2D>();
 			cam = Camera.main;
