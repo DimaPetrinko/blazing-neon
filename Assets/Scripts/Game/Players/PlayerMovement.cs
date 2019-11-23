@@ -3,8 +3,9 @@ using UnityEngine;
 
 namespace Game.Players
 {
-	public interface IMovementBehaviour
+	public interface IMovementBehaviour : IComponent
 	{
+		float Speed { get; }
 		void PerformDash(Vector2 movementDirection);
 		void PerformMovement(Vector2 movementDirection);
 	}
@@ -22,6 +23,8 @@ namespace Game.Players
 		private float currentDashSpeed;
 		private bool isDashing;
 		private bool canDash = true;
+
+		public float Speed => speed;
 
 		// TODO: stack of movement modes?
 

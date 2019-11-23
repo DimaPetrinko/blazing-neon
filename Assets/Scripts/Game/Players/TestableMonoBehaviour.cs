@@ -2,8 +2,12 @@ using UnityEngine;
 
 namespace Game.Players
 {
-	public abstract class TestableMonoBehaviour : MonoBehaviour
+	public abstract class TestableMonoBehaviour : MonoBehaviour, IComponent
 	{
+		public Vector3 Position => transform.position;
+		public Quaternion Rotation => transform.rotation;
+		public Vector3 Scale => transform.localScale;
+
 		private void Awake() => Init();
 		private void OnEnable() => Enabled();
 		private void OnDisable() => Disabled();
