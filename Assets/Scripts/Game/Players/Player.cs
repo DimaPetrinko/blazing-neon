@@ -14,9 +14,9 @@ namespace Game.Players
 	[RequireComponent(typeof(PlayerLooking))]
 	public sealed class Player : TestableMonoBehaviour, ICharacterController
 	{
-		public IInputBehaviour InputBehaviour { get; private set; }
-		public IMovementBehaviour MovementBehaviour { get; private set; }
-		public ILookingBehaviour LookingBehaviour { get; private set; }
+		public IInputBehaviour InputBehaviour { get; set; }
+		public IMovementBehaviour MovementBehaviour { get; set; }
+		public ILookingBehaviour LookingBehaviour { get; set; }
 
 
 		public override void Init()

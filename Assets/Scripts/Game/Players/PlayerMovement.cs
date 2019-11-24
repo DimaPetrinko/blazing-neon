@@ -18,7 +18,6 @@ namespace Game.Players
 		[SerializeField] private float postDashCooldown;
 		[SerializeField] private AnimationCurve dashSpeedCurve;
 
-		private Rigidbody2D rb;
 		private Vector2 dashDirection;
 		private float currentDashSpeed;
 		private bool isDashing;
@@ -26,15 +25,12 @@ namespace Game.Players
 
 		public float Speed => speed;
 
-		// TODO: stack of movement modes?
-
-		public override void Init() => rb = GetComponent<Rigidbody2D>();
-
 		public void PerformDash(Vector2 movementDirection) => StartCoroutine(Dash(movementDirection));
 
 		private IEnumerator Dash(Vector2 movementDirection)
 		{
 			if (!canDash || isDashing) yield break;
+			movementDirection.Normalize();
 			canDash = false;
 			isDashing = true;
 			dashDirection = movementDirection;
@@ -55,11 +51,12 @@ namespace Game.Players
 
 		public void PerformMovement(Vector2 movementDirection)
 		{
-			Vector2 finalMovementDirection;
-			if (!isDashing) finalMovementDirection = speed * Time.deltaTime * movementDirection;
-			else finalMovementDirection = Time.deltaTime * currentDashSpeed * dashDirection;
+			movementDirection.Normalize();
+			Vector2 movementVector;
+			if (!isDashing) movementVector = speed * Time.deltaTime * movementDirection;
+			else movementVector = Time.deltaTime * currentDashSpeed * dashDirection;
 
-			rb.MovePosition(rb.position + finalMovementDirection);
+			transform.Translate(movementVector, Space.World);
 		}
 	}
 }

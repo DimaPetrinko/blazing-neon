@@ -4,9 +4,23 @@ namespace Game.Players
 {
 	public abstract class TestableMonoBehaviour : MonoBehaviour, IComponent
 	{
-		public Vector3 Position => transform.position;
-		public Quaternion Rotation => transform.rotation;
-		public Vector3 Scale => transform.localScale;
+		public Vector3 Position
+		{
+			get => transform.position;
+			set => transform.position = value;
+		}
+
+		public Quaternion Rotation
+		{
+			get => transform.rotation;
+			set => transform.rotation = value;
+		}
+
+		public Vector3 Scale
+		{
+			get => transform.localScale;
+			set => transform.localScale = value;
+		}
 
 		private void Awake() => Init();
 		private void OnEnable() => Enabled();
