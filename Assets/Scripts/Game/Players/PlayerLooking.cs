@@ -18,17 +18,16 @@ namespace Game.Players
 		public void PerformLooking(Vector2 lookDirection)
 		{
 			if (lookDirection == Vector2.zero) return;
-			float angle;
+			Vector2 finalLookDirection;
 			// if this is mouse input
 			if (lookDirection.x > 1 || lookDirection.y > 1 || lookDirection.x < -1 || lookDirection.y < -1)
 			{
-				var position = transform.position;
-				var worldPoint = ScreenToWorldPointProvider.Get(lookDirection, position);
-				angle = Vector3.SignedAngle(Vector3.up, worldPoint - position, Vector3.forward);
+				var worldPoint = ScreenToWorldPointProvider.Get(lookDirection, Position);
+				finalLookDirection = worldPoint - Position;
 			}
-			else angle = Vector3.SignedAngle(Vector3.up, lookDirection, Vector3.forward);
+			else finalLookDirection = lookDirection;
 
-			transform.rotation = Quaternion.Euler(0, 0, angle);
+			transform.rotation = Quaternion.FromToRotation(Vector3.up, finalLookDirection);
 		}
 	}
 }

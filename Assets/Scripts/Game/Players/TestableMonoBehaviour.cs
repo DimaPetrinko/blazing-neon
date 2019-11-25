@@ -22,6 +22,8 @@ namespace Game.Players
 			set => transform.localScale = value;
 		}
 
+		protected float DeltaTime => Time.deltaTime;
+
 		private void Awake() => Init();
 		private void OnEnable() => Enabled();
 		private void OnDisable() => Disabled();

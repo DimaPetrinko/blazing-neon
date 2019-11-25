@@ -39,7 +39,7 @@ namespace Game.Players
 			while (dashTime < maxDashTime)
 			{
 				currentDashSpeed = dashSpeedCurve.Evaluate(dashTime) * maxDashSpeed + 1;
-				dashTime += Time.deltaTime;
+				dashTime += DeltaTime;
 				yield return null;
 			}
 
@@ -53,8 +53,8 @@ namespace Game.Players
 		{
 			movementDirection.Normalize();
 			Vector2 movementVector;
-			if (!isDashing) movementVector = speed * Time.deltaTime * movementDirection;
-			else movementVector = Time.deltaTime * currentDashSpeed * dashDirection;
+			if (!isDashing) movementVector = speed * DeltaTime * movementDirection;
+			else movementVector = DeltaTime * currentDashSpeed * dashDirection;
 
 			transform.Translate(movementVector, Space.World);
 		}

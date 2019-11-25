@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Game.Players.TDD.Movement;
+using UnityEngine;
 
 namespace Game.Players
 {
@@ -10,7 +11,7 @@ namespace Game.Players
 	}
 
 	[RequireComponent(typeof(PlayerInput))]
-	[RequireComponent(typeof(PlayerMovement))]
+//	[RequireComponent(typeof(PlayerMovementMonoBehaviour))]
 	[RequireComponent(typeof(PlayerLooking))]
 	public sealed class Player : TestableMonoBehaviour, ICharacterController
 	{
@@ -18,14 +19,17 @@ namespace Game.Players
 		public IMovementBehaviour MovementBehaviour { get; set; }
 		public ILookingBehaviour LookingBehaviour { get; set; }
 
-
 		public override void Init()
 		{
 			InputBehaviour = GetComponent<PlayerInput>();
-			MovementBehaviour = GetComponent<PlayerMovement>();
+			MovementBehaviour = GetComponent<PlayerMovementBehaviourComponent>()?.Behaviour ??
+				GetComponent<PlayerMovement>();
 			LookingBehaviour = GetComponent<PlayerLooking>();
-			InputBehaviour.Dash += MovementBehaviour.PerformDash;
+			InputBehaviour.Dash += DashEventHandler;
 		}
+
+		private void DashEventHandler(object sender, Vector2EventArgs args) =>
+			MovementBehaviour.PerformDash(args.Value);
 
 		public override void FixedUpdateMethod()
 		{

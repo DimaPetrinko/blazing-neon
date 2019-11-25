@@ -7,14 +7,21 @@ namespace Game.Players
 {
 	public interface IInputBehaviour
 	{
-		event Action<Vector2> Dash;
+		event EventHandler<Vector2EventArgs> Dash;
 		Vector2 MovementDirection { get; }
 		Vector2 LookDirection { get; }
 	}
 
+	public sealed class Vector2EventArgs : EventArgs
+	{
+		public Vector2 Value { get; }
+
+		public Vector2EventArgs(Vector2 value) => Value = value;
+	}
+
 	public sealed class PlayerInput : TestableMonoBehaviour, IInputBehaviour
 	{
-		public event Action<Vector2> Dash;
+		public event EventHandler<Vector2EventArgs> Dash;
 
 		[SerializeField] private float dashSpeedThreshold;
 
@@ -44,7 +51,8 @@ namespace Game.Players
 
 		private void DashPerformed(InputAction.CallbackContext context)
 		{
-			if (MovementDirection.sqrMagnitude > dashSpeedThreshold) Dash?.Invoke(MovementDirection);
+			if (MovementDirection.sqrMagnitude > dashSpeedThreshold)
+				Dash?.Invoke(this, new Vector2EventArgs(MovementDirection));
 		}
 	}
 }

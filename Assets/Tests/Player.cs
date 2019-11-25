@@ -112,7 +112,8 @@ namespace Tests
 
 				lookBehaviour.PerformLooking(lookDirection);
 
-				Assert.IsTrue(player.Rotation.eulerAngles.z == -45 || player.Rotation.eulerAngles.z == 315);
+				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(315, player.Rotation.eulerAngles.z);
+				else Assert.AreEqual(-45, player.Rotation.eulerAngles.z);
 			}
 
 			[Test]
@@ -128,23 +129,8 @@ namespace Tests
 
 				lookBehaviour.PerformLooking(lookDirection);
 
-				Assert.IsTrue(player.Rotation.eulerAngles.z == -90 || player.Rotation.eulerAngles.z == 270);
-			}
-
-			[Test]
-			public void mouse_position_smaller_than_unit_vector_rotates_player_correctly()
-			{
-				var screenToWorldPointProviderSubstitute = Substitute.For<IScreenToWorldPointProvider>();
-				player.Position = new Vector3(5, 2, 0);
-				player.Rotation = Quaternion.identity;
-				var lookDirection = new Vector2(0.5f, 0);
-				screenToWorldPointProviderSubstitute.Get(lookDirection, player.Position)
-					.Returns((Vector3)lookDirection.normalized);
-				lookBehaviour.ScreenToWorldPointProvider = screenToWorldPointProviderSubstitute;
-
-				lookBehaviour.PerformLooking(lookDirection);
-
-				Assert.IsTrue(player.Rotation.eulerAngles.z == -90 || player.Rotation.eulerAngles.z == 270);
+				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(270, player.Rotation.eulerAngles.z);
+				else Assert.AreEqual(-90, player.Rotation.eulerAngles.z);
 			}
 
 			[Test]
@@ -155,7 +141,8 @@ namespace Tests
 
 				lookBehaviour.PerformLooking(lookDirection);
 
-				Assert.IsTrue(player.Rotation.eulerAngles.z == -90 || player.Rotation.eulerAngles.z == 270);
+				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(270, player.Rotation.eulerAngles.z);
+				else Assert.AreEqual(-90, player.Rotation.eulerAngles.z);
 			}
 
 			[Test]
@@ -166,7 +153,8 @@ namespace Tests
 
 				lookBehaviour.PerformLooking(lookDirection);
 
-				Assert.IsTrue(player.Rotation.eulerAngles.z == -45 || player.Rotation.eulerAngles.z == 315);
+				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(315, player.Rotation.eulerAngles.z);
+				else Assert.AreEqual(-45, player.Rotation.eulerAngles.z);
 			}
 
 			[Test]
