@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Players.TDD.Movement
 {
-	public sealed class PlayerMovement : IMovementBehaviour
+	public sealed class PlayerMovement : IMovementBehaviour, IComponent
 	{
 		public const float DEFAULT_SPEED = 1;
 		public const float DEFAULT_DASH_SPEED = 1;
@@ -11,10 +11,10 @@ namespace Game.Players.TDD.Movement
 		public float DashSpeed { get; private set; }
 
 
-		Vector3 IComponent.Position => TransformProvider.Position;
-		Quaternion IComponent.Rotation => TransformProvider.Rotation;
-		Vector3 IComponent.Scale => TransformProvider.LocalScale;
-		
+		Vector3 Game.Players.IComponent.Position => TransformProvider.Position;
+		Quaternion Game.Players.IComponent.Rotation => TransformProvider.Rotation;
+		Vector3 Game.Players.IComponent.Scale => TransformProvider.LocalScale;
+
 		public ITransformProvider TransformProvider { get; }
 		public ITimeService TimeService { get; }
 

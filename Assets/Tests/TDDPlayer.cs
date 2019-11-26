@@ -1,8 +1,9 @@
 using Game.Players.TDD;
-using Game.Players.TDD.Movement;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using PlayerMovement = Game.Players.TDD.Movement.PlayerMovement;
+using PlayerLooking = Game.Players.TDD.Looking.PlayerLooking;
 
 namespace Tests
 {
@@ -237,9 +238,106 @@ namespace Tests
 
 					Assert.AreEqual(new Vector3(5, 2), movementBehaviour.TransformProvider.Position);
 				}
+
+				[Test]
+				public void Vector2_right_does_something()
+				{
+					Assert.Fail();
+				}
 			}
 		}
 
-		public static class Looking {}
+		public static class Looking
+		{
+			private static PlayerLooking lookingBehaviour;
+			
+			[SetUp]
+			public static void LookingSetup() => lookingBehaviour = new PlayerLooking();
+
+			public sealed class PerformLookingWithMouseMethod
+			{
+				[SetUp]
+				public void PerformLookingWithMouseSetup() => LookingSetup();
+
+				[Test]
+				public void Vector2_zero_does_something()
+				{
+					Assert.Fail();
+				}
+			}
+			
+			public sealed class PerformLookingWithGamepadMethod
+			{
+				[SetUp]
+				public void PerformLookingWithGamepadSetup() => LookingSetup();
+				
+				[Test]
+				public void Vector2_zero_does_nothing()
+				{
+					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, 45);
+					var originalRotationEuler = lookingBehaviour.TransformProvider.Rotation.eulerAngles;
+
+					lookingBehaviour.PerformLookingWithGamepad(Vector2.zero);
+
+					var finalRotationEuler = lookingBehaviour.TransformProvider.Rotation.eulerAngles;
+					Assert.AreEqual(originalRotationEuler, finalRotationEuler);
+				}
+
+				[Test]
+				public void Vector2_right_with_initial_rotation_0_rotates_to_negative_90()
+				{
+					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, 0);
+					var supposedRotationEuler = Quaternion.Euler(0, 0, -90).eulerAngles;
+					
+					lookingBehaviour.PerformLookingWithGamepad(Vector2.right);
+
+					Assert.AreEqual(supposedRotationEuler, lookingBehaviour.TransformProvider.Rotation.eulerAngles);
+				}
+				
+				[Test]
+				public void Vector2_up_with_initial_rotation_negative_135_rotates_to_negative_0()
+				{
+					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, -135);
+					var supposedRotationEuler = Quaternion.Euler(0, 0, 0).eulerAngles;
+					
+					lookingBehaviour.PerformLookingWithGamepad(Vector2.up);
+
+					Assert.AreEqual(supposedRotationEuler, lookingBehaviour.TransformProvider.Rotation.eulerAngles);
+				}
+
+				[Test]
+				public void not_normalized_Vector2_to_the_right_with_initial_rotation_0_rotates_to_negative_90()
+				{
+					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, 0);
+					var supposedRotationEuler = Quaternion.Euler(0, 0, -90).eulerAngles;
+
+					lookingBehaviour.PerformLookingWithGamepad(new Vector2(20, 0));
+
+					Assert.AreEqual(supposedRotationEuler, lookingBehaviour.TransformProvider.Rotation.eulerAngles);
+				}
+
+				[Test]
+				public void not_normalized_Vector2_to_the_up_with_initial_rotation_90_rotates_to_0()
+				{
+					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, 90);
+					var supposedRotationEuler = Quaternion.Euler(0, 0, 0).eulerAngles;
+
+					lookingBehaviour.PerformLookingWithGamepad(new Vector2(0, 20));
+
+					Assert.AreEqual(supposedRotationEuler, lookingBehaviour.TransformProvider.Rotation.eulerAngles);
+				}
+
+				[Test]
+				public void Vector3_with_only_z_does_nothing()
+				{
+					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, 22);
+					var originalRotationEuler = lookingBehaviour.TransformProvider.Rotation.eulerAngles;
+
+					lookingBehaviour.PerformLookingWithGamepad(new Vector3(0, 0, 20));
+
+					Assert.AreEqual(originalRotationEuler, lookingBehaviour.TransformProvider.Rotation.eulerAngles);
+				}
+			}
+		}
 	}
 }

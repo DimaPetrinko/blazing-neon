@@ -2,6 +2,7 @@ using System;
 using Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using DeviceType = Game.Players.TDD.DeviceType;
 
 namespace Game.Players
 {
@@ -10,6 +11,7 @@ namespace Game.Players
 		event EventHandler<Vector2EventArgs> Dash;
 		Vector2 MovementDirection { get; }
 		Vector2 LookDirection { get; }
+		DeviceType LookingDeviceType { get; }
 	}
 
 	public sealed class Vector2EventArgs : EventArgs
@@ -29,6 +31,7 @@ namespace Game.Players
 
 		public Vector2 MovementDirection { get; private set; }
 		public Vector2 LookDirection { get; private set; }
+		public DeviceType LookingDeviceType { get; private set; }
 
 		public override void Init()
 		{
@@ -46,12 +49,26 @@ namespace Game.Players
 		private void MovementPerformed(InputAction.CallbackContext context) =>
 			MovementDirection = context.ReadValue<Vector2>();
 
-		private void LookingPerformed(InputAction.CallbackContext context) =>
+		private void LookingPerformed(InputAction.CallbackContext context)
+		{
 			LookDirection = context.ReadValue<Vector2>();
+			LookingDeviceType = GetDeviceType(context);
+		}
+
+		public static DeviceType GetDeviceType(InputAction.CallbackContext context)
+		{
+			switch (context.control.device)
+			{
+				case Mouse _: return DeviceType.Mouse;
+				case Gamepad _: return DeviceType.Gamepad;
+				case Keyboard _: return DeviceType.Keyboard;
+				default: return DeviceType.None;
+			}
+		}
 
 		private void DashPerformed(InputAction.CallbackContext context)
 		{
-			if (MovementDirection.sqrMagnitude > dashSpeedThreshold)
+			if (MovementDirection.sqrMagnitude > dashSpeedThreshold) // TODO move to movement behaviour
 				Dash?.Invoke(this, new Vector2EventArgs(MovementDirection));
 		}
 	}

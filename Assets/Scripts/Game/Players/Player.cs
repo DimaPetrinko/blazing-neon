@@ -1,5 +1,9 @@
-﻿using Game.Players.TDD.Movement;
+﻿using System;
+using System.Collections.Generic;
+using Game.Players.TDD.Looking;
+using Game.Players.TDD.Movement;
 using UnityEngine;
+using DeviceType = Game.Players.TDD.DeviceType;
 
 namespace Game.Players
 {
@@ -12,9 +16,11 @@ namespace Game.Players
 
 	[RequireComponent(typeof(PlayerInput))]
 //	[RequireComponent(typeof(PlayerMovementMonoBehaviour))]
-	[RequireComponent(typeof(PlayerLooking))]
+//	[RequireComponent(typeof(PlayerLooking))]
 	public sealed class Player : TestableMonoBehaviour, ICharacterController
 	{
+		private Dictionary<DeviceType, Action<Vector2>> performLookingActions;
+
 		public IInputBehaviour InputBehaviour { get; set; }
 		public IMovementBehaviour MovementBehaviour { get; set; }
 		public ILookingBehaviour LookingBehaviour { get; set; }
@@ -22,10 +28,15 @@ namespace Game.Players
 		public override void Init()
 		{
 			InputBehaviour = GetComponent<PlayerInput>();
-			MovementBehaviour = GetComponent<PlayerMovementBehaviourComponent>()?.Behaviour ??
-				GetComponent<PlayerMovement>();
-			LookingBehaviour = GetComponent<PlayerLooking>();
+			MovementBehaviour = GetComponent<PlayerMovementComponent>()?.Behaviour ?? GetComponent<PlayerMovement>();
+			LookingBehaviour = GetComponent<PlayerLookingComponent>()?.Behaviour ?? GetComponent<PlayerLooking>();
 			InputBehaviour.Dash += DashEventHandler;
+
+			performLookingActions = new Dictionary<DeviceType, Action<Vector2>>
+			{
+				{DeviceType.Mouse, LookingBehaviour.PerformLookingWithMouse},
+				{DeviceType.Gamepad, LookingBehaviour.PerformLookingWithGamepad}
+			};
 		}
 
 		private void DashEventHandler(object sender, Vector2EventArgs args) =>
@@ -34,7 +45,9 @@ namespace Game.Players
 		public override void FixedUpdateMethod()
 		{
 			MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
-			LookingBehaviour.PerformLooking(InputBehaviour.LookDirection);
+
+			if (performLookingActions.ContainsKey(InputBehaviour.LookingDeviceType))
+				performLookingActions[InputBehaviour.LookingDeviceType].Invoke(InputBehaviour.LookDirection);
 		}
 	}
 }

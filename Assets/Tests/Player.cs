@@ -110,7 +110,7 @@ namespace Tests
 				player.Position = Vector3.zero;
 				player.Rotation = Quaternion.identity;
 
-				lookBehaviour.PerformLooking(lookDirection);
+				lookBehaviour.PerformLookingWithMouse(lookDirection);
 
 				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(315, player.Rotation.eulerAngles.z);
 				else Assert.AreEqual(-45, player.Rotation.eulerAngles.z);
@@ -127,7 +127,7 @@ namespace Tests
 					.Returns((Vector3)lookDirection.normalized);
 				lookBehaviour.ScreenToWorldPointProvider = screenToWorldPointProviderSubstitute;
 
-				lookBehaviour.PerformLooking(lookDirection);
+				lookBehaviour.PerformLookingWithMouse(lookDirection);
 
 				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(270, player.Rotation.eulerAngles.z);
 				else Assert.AreEqual(-90, player.Rotation.eulerAngles.z);
@@ -139,7 +139,7 @@ namespace Tests
 				var lookDirection = Vector2.right;
 				player.Rotation = Quaternion.identity;
 
-				lookBehaviour.PerformLooking(lookDirection);
+				lookBehaviour.PerformLookingWithGamepad(lookDirection);
 
 				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(270, player.Rotation.eulerAngles.z);
 				else Assert.AreEqual(-90, player.Rotation.eulerAngles.z);
@@ -151,7 +151,7 @@ namespace Tests
 				var lookDirection = new Vector2(1, 1).normalized;
 				player.Rotation = Quaternion.identity;
 
-				lookBehaviour.PerformLooking(lookDirection);
+				lookBehaviour.PerformLookingWithGamepad(lookDirection);
 
 				if (player.Rotation.eulerAngles.z > 0) Assert.AreEqual(315, player.Rotation.eulerAngles.z);
 				else Assert.AreEqual(-45, player.Rotation.eulerAngles.z);
@@ -164,7 +164,7 @@ namespace Tests
 				player.Rotation = Quaternion.Euler(0, 0, playerRotationAngle);
 				playerRotationAngle = player.Rotation.eulerAngles.z;
 
-				lookBehaviour.PerformLooking(Vector2.zero);
+				lookBehaviour.PerformLookingWithGamepad(Vector2.zero);
 
 				Assert.AreEqual(playerRotationAngle, player.Rotation.eulerAngles.z);
 			}
