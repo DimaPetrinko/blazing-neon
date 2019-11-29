@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Game.TDD.Players.Looking;
-using Game.TDD.Players.Movement;
 using UnityEngine;
 using DeviceType = Game.TDD.Players.Input.DeviceType;
 
@@ -15,8 +13,8 @@ namespace Game.Players.Old
 	}
 
 	[RequireComponent(typeof(PlayerInput))]
-//	[RequireComponent(typeof(PlayerMovementMonoBehaviour))]
-//	[RequireComponent(typeof(PlayerLooking))]
+	[RequireComponent(typeof(PlayerMovement))]
+	[RequireComponent(typeof(PlayerLooking))]
 	public sealed class Player : TestableMonoBehaviour, ICharacterController
 	{
 		private Dictionary<DeviceType, Action<Vector2>> performLookingActions;
@@ -28,8 +26,8 @@ namespace Game.Players.Old
 		public override void Init()
 		{
 			InputBehaviour = GetComponent<PlayerInput>();
-			MovementBehaviour = GetComponent<PlayerMovementComponent>()?.Instance ?? GetComponent<PlayerMovement>();
-			LookingBehaviour = GetComponent<PlayerLookingComponent>()?.Instance ?? GetComponent<PlayerLooking>();
+			MovementBehaviour = GetComponent<PlayerMovement>();
+			LookingBehaviour = GetComponent<PlayerLooking>();
 			InputBehaviour.Dash += DashEventHandler;
 
 			performLookingActions = new Dictionary<DeviceType, Action<Vector2>>

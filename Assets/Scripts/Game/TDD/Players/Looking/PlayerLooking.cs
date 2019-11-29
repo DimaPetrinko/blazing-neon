@@ -1,12 +1,18 @@
-using Game.Players.Old;
+using Game.TDD.GameSystemServices;
 using UnityEngine;
 
 namespace Game.TDD.Players.Looking
 {
+	public interface ILookingBehaviour
+	{
+		ITransformProvider TransformProvider { get; set; }
+		IWorldToScreenProvider WorldToScreenProvider { get; set; }
+		void PerformLookingInDirection(Vector2 lookDirection);
+		void PerformLookingAtPosition(Vector2 mousePosition);
+	}
+
 	public sealed class PlayerLooking : ILookingBehaviour
 	{
-		IScreenToWorldPointProvider ILookingBehaviour.ScreenToWorldPointProvider { get; set; } // TODO: compatibility
-
 		public ITransformProvider TransformProvider { get; set; }
 		public IWorldToScreenProvider WorldToScreenProvider { get; set; }
 

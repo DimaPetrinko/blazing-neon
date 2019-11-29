@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
-using Game.Players.Old;
+using Game.TDD.GameSystemServices;
+using Game.TDD.Players.Input;
 using UnityEngine;
 using DeviceType = Game.TDD.Players.Input.DeviceType;
-using PlayerInput = Game.TDD.Players.Input.PlayerInput;
+using ILookingBehaviour = Game.TDD.Players.Looking.ILookingBehaviour;
+using IMovementBehaviour = Game.TDD.Players.Movement.IMovementBehaviour;
 using PlayerLooking = Game.TDD.Players.Looking.PlayerLooking;
 using PlayerMovement = Game.TDD.Players.Movement.PlayerMovement;
 
@@ -72,8 +74,8 @@ namespace Game.TDD.Players
 		{
 			MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
 
-			if (performLookingActions.ContainsKey(InputBehaviour.LookingDeviceType))
-				performLookingActions[InputBehaviour.LookingDeviceType].Invoke(InputBehaviour.LookDirection);
+			if (performLookingActions.ContainsKey(InputBehaviour.LookDeviceType))
+				performLookingActions[InputBehaviour.LookDeviceType].Invoke(InputBehaviour.LookDirection);
 		}
 	}
 }

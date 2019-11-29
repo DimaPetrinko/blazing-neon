@@ -1,12 +1,9 @@
-using Game.TDD;
-using Game.TDD.Players.Looking;
 using UnityEngine;
 
 namespace Game.Players.Old
 {
-	public interface ILookingBehaviour : ISceneObject
+	public interface ILookingBehaviour
 	{
-		IWorldToScreenProvider WorldToScreenProvider { get; set; }
 		IScreenToWorldPointProvider ScreenToWorldPointProvider { get; set; }
 		void PerformLookingInDirection(Vector2 lookDirection);
 		void PerformLookingAtPosition(Vector2 mousePosition);
@@ -15,8 +12,6 @@ namespace Game.Players.Old
 	[RequireComponent(typeof(Rigidbody2D))]
 	public sealed class PlayerLooking : TestableMonoBehaviour, ILookingBehaviour
 	{
-		ITransformProvider ISceneObject.TransformProvider { get; set; }
-		IWorldToScreenProvider ILookingBehaviour.WorldToScreenProvider { get; set; }
 		public IScreenToWorldPointProvider ScreenToWorldPointProvider { get; set; }
 
 		public override void Init() => ScreenToWorldPointProvider = new ScreenToWorldPointProvider(Camera.main);

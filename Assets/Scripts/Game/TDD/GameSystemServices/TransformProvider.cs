@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.TDD
+namespace Game.TDD.GameSystemServices
 {
 	public interface ITransformProvider
 	{

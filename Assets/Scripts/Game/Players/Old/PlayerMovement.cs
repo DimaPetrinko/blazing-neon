@@ -1,10 +1,9 @@
 using System.Collections;
-using Game.TDD;
 using UnityEngine;
 
 namespace Game.Players.Old
 {
-	public interface IMovementBehaviour : IComponent, ISceneObject
+	public interface IMovementBehaviour : IComponent
 	{
 		float Speed { get; }
 		void PerformDash(Vector2 movementDirection);
@@ -24,7 +23,6 @@ namespace Game.Players.Old
 		private bool isDashing;
 		private bool canDash = true;
 
-		ITransformProvider ISceneObject.TransformProvider { get; set; }
 		public float Speed => speed;
 
 		public void PerformDash(Vector2 movementDirection) => StartCoroutine(Dash(movementDirection));
