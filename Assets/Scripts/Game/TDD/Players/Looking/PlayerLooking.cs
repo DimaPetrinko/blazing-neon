@@ -26,8 +26,8 @@ namespace Game.TDD.Players.Looking
 				new GameObject("PlayerLooking").transform);
 		}
 
-		public PlayerLooking(Transform transform) : this(new UnityWorldToScreenProvider(Camera.main),
-			new UnityTransformProvider(transform)) {}
+		public PlayerLooking(Transform transform, IWorldToScreenProvider worldToScreenProvider = null) : this(
+			worldToScreenProvider, new UnityTransformProvider(transform)) {}
 
 		public PlayerLooking(ITransformProvider transformProvider) : this(new UnityWorldToScreenProvider(Camera.main),
 			transformProvider) {}
