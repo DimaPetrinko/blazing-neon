@@ -172,13 +172,13 @@ namespace Tests.TDDPlayer
 				Assert.AreEqual(originalRotationEuler, player.TransformProvider.Rotation.eulerAngles);
 			}
 		}
-		
+
 		public sealed class TimeServiceProperty
 		{
 			private ITimeService timeService;
 
 			[SetUp]
-			public void TimeServiceSetup() => timeService = new UnityTimeService(); 
+			public void TimeServiceSetup() => timeService = new UnityTimeService();
 
 			[Test]
 			public void default_TimeService_is_not_null() => Assert.NotNull(timeService);
@@ -244,11 +244,11 @@ namespace Tests.TDDPlayer
 					Assert.AreEqual(newLookDirection.normalized, inputBehaviour.LookDirection);
 				}
 			}
-			
+
 			public sealed class MovementDirectionProperty
 			{
 				[SetUp]
-				public void  MovementDirectionSetup() => InputSetup();
+				public void MovementDirectionSetup() => InputSetup();
 
 				[Test]
 				public void default_MovementDirection_is_Vector2_zero() =>
@@ -480,7 +480,7 @@ namespace Tests.TDDPlayer
 				public void using_constructor_with_invalid_data_default_dash_parameters_have_valid_values()
 				{
 					movementBehaviour = new PlayerMovement(-1, -1, -1);
-					
+
 					Assert.AreEqual(PlayerMovement.DEFAULT_DASH_DISTANCE, movementBehaviour.DashDistance);
 					Assert.AreEqual(PlayerMovement.DEFAULT_DASH_DURATION, movementBehaviour.DashDuration);
 					Assert.NotNull(movementBehaviour.DashSpeedCurve);
@@ -504,11 +504,11 @@ namespace Tests.TDDPlayer
 					movementBehaviour = new PlayerMovement(0, 3, 1, null, timeServiceSubstitute);
 					movementBehaviour.TransformProvider.Position = Vector3.zero;
 					var supposedPosition = new Vector3(3, 0);
-					
+
 					// perform dash. couple of times?
 					movementBehaviour.PerformDash(new Vector2(3, 0));
 					movementBehaviour.PerformMovement(Vector2.one);
-					
+
 					//check for things
 					Assert.AreEqual(supposedPosition, movementBehaviour.TransformProvider.Position);
 				}
@@ -523,11 +523,11 @@ namespace Tests.TDDPlayer
 					movementBehaviour = new PlayerMovement(0, 3, 1, animationCurve, timeServiceSubstitute);
 					movementBehaviour.TransformProvider.Position = Vector3.zero;
 					var supposedPosition = new Vector3(3, 0);
-					
+
 					// perform dash. couple of times?
 					movementBehaviour.PerformDash(new Vector2(3, 0));
 					movementBehaviour.PerformMovement(Vector2.one);
-					
+
 					//check for things
 					Assert.AreEqual(supposedPosition, movementBehaviour.TransformProvider.Position);
 				}
