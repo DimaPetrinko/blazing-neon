@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   createInstanceOnAwake: 0
+  cam: {fileID: 0}
 --- !u!114 &2241086860669271362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28,6 +29,7 @@ MonoBehaviour:
   createInstanceOnAwake: 1
   playerInput: {fileID: 7567955810658727640}
   playerMovementComponent: {fileID: 4266516826282956161}
+  playerDashingComponent: {fileID: 5473795474256831515}
   playerLookingComponent: {fileID: 221344796114866394}
 --- !u!114 &4266516826282956161
 MonoBehaviour:
@@ -43,6 +45,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   createInstanceOnAwake: 1
   speed: 10
+--- !u!114 &5473795474256831515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8590685290608298283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dbb5710333941c09a2cfe0664c745f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createInstanceOnAwake: 0
   dashDistance: 2.5
   dashDuration: 0.3
   dashSpeedCurve:
@@ -51,30 +66,30 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.4292449
-      outSlope: 1.4292449
+      inSlope: 1.5429623
+      outSlope: 1.5429623
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.47404742
+      value: 0.7314373
+      inSlope: 1.0267919
+      outSlope: 1.0267919
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
       outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.49964675
-      value: 0.7141176
-      inSlope: 0.9625687
-      outSlope: 0.9625687
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.73046553
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.5713612
-      outSlope: 0.5713612
+      inSlope: 0.5106215
+      outSlope: 0.5106215
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

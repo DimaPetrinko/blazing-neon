@@ -1,15 +1,16 @@
+using System;
 using Game.TDD.GameSystemServices;
+using Game.TDD.Players.Dashing;
 using Game.TDD.Players.Input;
 using Game.TDD.Players.Looking;
 using Game.TDD.Players.Movement;
 using NSubstitute;
 using NUnit.Framework;
+using Tests.TDDPlayer.Builders;
 using UnityEngine;
 using DeviceType = Game.TDD.Players.Input.DeviceType;
 using Player = Game.TDD.Players.Player;
-using PlayerInput = Game.TDD.Players.Input.PlayerInput;
 using PlayerMovement = Game.TDD.Players.Movement.PlayerMovement;
-using PlayerLooking = Game.TDD.Players.Looking.PlayerLooking;
 using Random = UnityEngine.Random;
 
 namespace Tests.TDDPlayer
@@ -20,75 +21,69 @@ namespace Tests.TDDPlayer
 		{
 			private static Player player;
 
-			public void InitializationSetup() => player = new Player();
-
 			[Test]
 			public void default_input_behaviour_is_not_null()
 			{
-				InitializationSetup();
+				player = A.Player;
 				Assert.NotNull(player.InputBehaviour);
 			}
 
 			[Test]
 			public void default_movement_behaviour_is_not_null()
 			{
-				InitializationSetup();
+				player = A.Player;
 				Assert.NotNull(player.MovementBehaviour);
 			}
 
 			[Test]
 			public void default_looking_behaviour_is_not_null()
 			{
-				InitializationSetup();
+				player = A.Player;
 				Assert.NotNull(player.LookingBehaviour);
 			}
 
 			[Test]
 			public void using_default_constructor_TransformProvider_is_the_same_for_player_and_his_components()
 			{
-				player = new Player();
+				player = A.Player;
 
 				Assert.AreEqual(player.TransformProvider, player.MovementBehaviour.TransformProvider);
 				Assert.AreEqual(player.TransformProvider, player.LookingBehaviour.TransformProvider);
 			}
 
 			[Test]
-			public void
-				using_TransformProvider_constructor_overload_TransformProvider_is_the_same_for_player_and_his_components()
+			public void using_TransformProvider_constructor_overload_TransformProvider_is_the_same_for_player_and_his_components()
 			{
-				player = new Player(new UnityTransformProvider(new GameObject().transform));
+				player = A.Player.With(A.UnityTransformProvider.Interface);
 
 				Assert.AreEqual(player.TransformProvider, player.MovementBehaviour.TransformProvider);
 				Assert.AreEqual(player.TransformProvider, player.LookingBehaviour.TransformProvider);
 			}
 
 			[Test]
-			public void
-				using_TransformProvider_constructor_overload_with_parameters_TransformProvider_is_the_same_for_player_and_his_components()
+			public void using_TransformProvider_constructor_overload_with_parameters_TransformProvider_is_the_same_for_player_and_his_components()
 			{
-				player = new Player(new UnityTransformProvider(new GameObject().transform), new PlayerInput(),
-					new PlayerMovement(), new PlayerLooking());
+				player = A.Player.With(A.UnityTransformProvider.Interface).With(A.PlayerInput.Interface)
+					.With(A.PlayerMovement.Interface).With(A.PlayerLooking.Interface);
 
 				Assert.AreEqual(player.TransformProvider, player.MovementBehaviour.TransformProvider);
 				Assert.AreEqual(player.TransformProvider, player.LookingBehaviour.TransformProvider);
 			}
 
 			[Test]
-			public void
-				using_Transform_constructor_overload_TransformProvider_is_the_same_for_player_and_his_components()
+			public void using_Transform_constructor_overload_TransformProvider_is_the_same_for_player_and_his_components()
 			{
-				player = new Player(new GameObject().transform);
+				player = A.Player.With(A.UnityTransformProvider.Interface);
 
 				Assert.AreEqual(player.TransformProvider, player.MovementBehaviour.TransformProvider);
 				Assert.AreEqual(player.TransformProvider, player.LookingBehaviour.TransformProvider);
 			}
 
 			[Test]
-			public void
-				using_Transform_constructor_overload_with_parameters_TransformProvider_is_the_same_for_player_and_his_components()
+			public void using_Transform_constructor_overload_with_parameters_TransformProvider_is_the_same_for_player_and_his_components()
 			{
-				player = new Player(new GameObject().transform, new PlayerInput(), new PlayerMovement(),
-					new PlayerLooking());
+				player = A.Player.With(A.UnityTransformProvider.Interface).With(A.PlayerInput.Interface)
+					.With(A.PlayerMovement.Interface).With(A.PlayerLooking.Interface);
 
 				Assert.AreEqual(player.TransformProvider, player.MovementBehaviour.TransformProvider);
 				Assert.AreEqual(player.TransformProvider, player.LookingBehaviour.TransformProvider);
@@ -97,12 +92,13 @@ namespace Tests.TDDPlayer
 			[Test]
 			public void MovementBehaviour_is_subscribed_to_Dash_event()
 			{
-				player = new Player(null as ITransformProvider, Substitute.For<IInputBehaviour>(),
-					Substitute.For<IMovementBehaviour>());
+				var inputBehaviourSubstitute = Substitute.For<IInputBehaviour>();
+				var dashBehaviourSubstitute = Substitute.For<IDashingBehaviour>();
+				player = A.Player.With(inputBehaviourSubstitute).With(dashBehaviourSubstitute);
 
 				player.InputBehaviour.Dash += Raise.EventWith(new Vector2EventArgs(Vector2.zero));
 
-				player.MovementBehaviour.Received().PerformDash(Arg.Any<Vector2>());
+				player.DashingBehaviour.Received().PerformDash(Arg.Any<Vector2>());
 			}
 
 			[Test]
@@ -112,8 +108,8 @@ namespace Tests.TDDPlayer
 				inputBehaviourSubstitute.MovementDirection.Returns(Vector2.right);
 				var timeServiceSubstitute = Substitute.For<ITimeService>();
 				timeServiceSubstitute.DeltaTime.Returns(1);
-				player = new Player(null as ITransformProvider, inputBehaviourSubstitute,
-					new PlayerMovement(1, 0, 0, null, timeServiceSubstitute));
+				player = A.Player.With(inputBehaviourSubstitute)
+					.With(A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface);
 				player.TransformProvider.Position = Vector2.zero;
 
 				player.FixedUpdate();
@@ -130,8 +126,7 @@ namespace Tests.TDDPlayer
 				var worldToScreenProvider = Substitute.For<IWorldToScreenProvider>();
 				worldToScreenProvider.Get(Arg.Any<Vector2>())
 					.Returns(new Vector2(Screen.width / 2f, Screen.height / 2f));
-				player = new Player(null as ITransformProvider, inputBehaviourSubstitute, null,
-					new PlayerLooking(worldToScreenProvider));
+				player = A.Player.With(inputBehaviourSubstitute).With(A.PlayerLooking.With(worldToScreenProvider).Interface);
 				player.TransformProvider.Rotation = Quaternion.Euler(0, 0, 0);
 				var supposedRotationEuler = Quaternion.FromToRotation(Vector3.up,
 					new Vector2(1, 0)).eulerAngles;
@@ -147,7 +142,7 @@ namespace Tests.TDDPlayer
 				var inputBehaviourSubstitute = Substitute.For<IInputBehaviour>();
 				inputBehaviourSubstitute.LookDeviceType.Returns(DeviceType.Gamepad);
 				inputBehaviourSubstitute.LookDirection.Returns(Vector2.right);
-				player = new Player(null as ITransformProvider, inputBehaviourSubstitute, null, new PlayerLooking());
+				player = A.Player.With(inputBehaviourSubstitute).With(A.PlayerLooking.Interface);
 				player.TransformProvider.Rotation = Quaternion.Euler(0, 0, 0);
 				var supposedRotationEuler = Quaternion.FromToRotation(Vector3.up,
 					new Vector2(1, 0)).eulerAngles;
@@ -163,7 +158,7 @@ namespace Tests.TDDPlayer
 				var inputBehaviourSubstitute = Substitute.For<IInputBehaviour>();
 				inputBehaviourSubstitute.LookDeviceType.Returns(DeviceType.Keyboard);
 				inputBehaviourSubstitute.LookDirection.Returns(Vector2.right);
-				player = new Player(null as ITransformProvider, inputBehaviourSubstitute, null, new PlayerLooking());
+				player = A.Player.With(inputBehaviourSubstitute).With(A.PlayerLooking.Interface);
 				player.TransformProvider.Rotation = Quaternion.Euler(0, 0, 0);
 				var originalRotationEuler = player.TransformProvider.Rotation.eulerAngles;
 
@@ -178,14 +173,13 @@ namespace Tests.TDDPlayer
 			private ITimeService timeService;
 
 			[SetUp]
-			public void TimeServiceSetup() => timeService = new UnityTimeService();
+			public void TimeServiceSetup() => timeService = A.UnityTimeService.Interface;
 
 			[Test]
 			public void default_TimeService_is_not_null() => Assert.NotNull(timeService);
 
 			[Test]
-			public void default_DeltaTime_is_greater_than_0() =>
-				Assert.Greater(timeService.DeltaTime, 0);
+			public void default_DeltaTime_is_greater_than_0() => Assert.Greater(timeService.DeltaTime, 0);
 
 			[Test]
 			public void default_Time_is_greater_than_0() => Assert.Greater(timeService.Time, 0);
@@ -196,7 +190,7 @@ namespace Tests.TDDPlayer
 			private static IInputBehaviour inputBehaviour;
 
 			[SetUp]
-			public static void InputSetup() => inputBehaviour = new PlayerInput();
+			public static void InputSetup() => inputBehaviour = A.PlayerInput.Interface;
 
 			public sealed class LookDirectionProperty
 			{
@@ -278,259 +272,288 @@ namespace Tests.TDDPlayer
 
 		public sealed class Movement
 		{
-			private static IMovementBehaviour movementBehaviour;
-
-			[SetUp]
-			public static void MovementSetup() => movementBehaviour = new PlayerMovement();
-
-			public sealed class PerformMovementMethod
+			private IMovementBehaviour movementBehaviour;
+			
+			[Test]
+			public void default_Speed_is_greater_than_0()
 			{
-				[Test]
-				public void default_Speed_is_greater_than_0()
-				{
-					MovementSetup();
+				movementBehaviour = A.PlayerMovement.Interface;
 
-					Assert.Greater(movementBehaviour.Speed, 0);
-				}
-
-				[Test]
-				public void default_Speed_has_the_value_of_DEFAULT_SPEED_constant()
-				{
-					MovementSetup();
-
-					Assert.AreEqual(PlayerMovement.DEFAULT_SPEED, movementBehaviour.Speed);
-				}
-
-				[Test]
-				public void Vector2_zero_does_nothing()
-				{
-					MovementSetup();
-					movementBehaviour.TransformProvider.Position = new Vector2(2, 5);
-
-					movementBehaviour.PerformMovement(Vector2.zero);
-
-					Assert.AreEqual(new Vector3(2, 5), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector2_right_with_Speed_1_and_DeltaTime_1_moves_1_unit_to_the_right()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-
-					movementBehaviour.PerformMovement(Vector2.right);
-
-					Assert.AreEqual(new Vector3(1, 0), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector2_up_with_Speed_1_and_DeltaTime_1_moves_1_unit_vertically()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-
-					movementBehaviour.PerformMovement(Vector2.up);
-
-					Assert.AreEqual(new Vector3(0, 1), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector2_right_with_Speed_5_and_DeltaTime_1_moves_1_unit_to_the_right()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(5, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-
-					movementBehaviour.PerformMovement(Vector2.right);
-
-					Assert.AreEqual(new Vector3(5, 0), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector2_up_with_Speed_5_and_DeltaTime_1_moves_1_unit_vertically()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(5, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-
-					movementBehaviour.PerformMovement(Vector2.up);
-
-					Assert.AreEqual(new Vector3(0, 5), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void
-					random_Vector2_with_only_x_coordinate_with_Speed_1_and_DeltaTime_1_still_moves_1_unit_in_the_correct_direction()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-					var movementDirection = new Vector2(Random.Range(0, 10000f), 0);
-
-					movementBehaviour.PerformMovement(movementDirection);
-
-					Assert.AreEqual(new Vector3(1, 0), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void
-					random_Vector2_with_only_y_coordinate_with_Speed_1_and_DeltaTime_1_still_moves_1_unit_in_the_correct_direction()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-					var movementDirection = new Vector2(0, Random.Range(0, 10000f));
-
-					movementBehaviour.PerformMovement(movementDirection);
-
-					Assert.AreEqual(new Vector3(0, 1), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector2_right_with_Speed_1_and_DeltaTime_05_moves_05_unit_to_the_right()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(0.5f);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-
-					movementBehaviour.PerformMovement(Vector2.right);
-
-					Assert.AreEqual(new Vector3(0.5f, 0), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector2_up_with_Speed_1_and_DeltaTime_05_moves_05_unit_vertically()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(0.5f);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-
-					movementBehaviour.PerformMovement(Vector2.up);
-
-					Assert.AreEqual(new Vector3(0, 0.5f), movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void Vector3_with_only_z_coordinate_does_nothing()
-				{
-					var position = movementBehaviour.TransformProvider.Position;
-
-					movementBehaviour.PerformMovement(new Vector3(0, 0, 20));
-
-					Assert.AreEqual(position, movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void
-					non_zero_Vector2_followed_by_Vector2_zero_both_with_Speed_1_and_DeltaTime_1_moves_in_a_non_zero_Vector2_direction_according_to_speed()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(1, 0, 0, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector2.zero;
-					var movementDirection = new Vector3(Random.Range(0, 10000f), Random.Range(0, 10000f));
-
-					movementBehaviour.PerformMovement(movementDirection);
-					movementBehaviour.PerformMovement(Vector2.zero);
-
-					Assert.AreEqual(movementDirection.normalized, movementBehaviour.TransformProvider.Position);
-				}
-
-				[Test]
-				public void when_rotated_Vector_right_moves_to_the_right()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1);
-					movementBehaviour = new PlayerMovement(timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Rotation = Quaternion.identity;
-					var supposedPosition = movementBehaviour.TransformProvider.Position +
-						movementBehaviour.Speed * new Vector3(1, 0);
-
-					movementBehaviour.TransformProvider.Rotate(Vector3.forward, 90);
-					movementBehaviour.PerformMovement(Vector2.right);
-
-					Assert.AreEqual(supposedPosition, movementBehaviour.TransformProvider.Position);
-				}
+				Assert.Greater(movementBehaviour.Speed, 0);
 			}
 
-			public sealed class DashMethod
+			[Test]
+			public void default_Speed_has_the_value_of_DEFAULT_SPEED_constant()
 			{
-				[SetUp]
-				public void DashSetup() => MovementSetup();
+				movementBehaviour = A.PlayerMovement.Interface;
 
-				[Test]
-				public void default_DashDistance_is_greater_than_zero() =>
-					Assert.Greater(movementBehaviour.DashDistance, 0);
+				Assert.AreEqual(PlayerMovement.DEFAULT_SPEED, movementBehaviour.Speed);
+			}
 
-				[Test]
-				public void default_DashDistance_has_the_value_of_DEFAULT_DASH_SPEED_constant() =>
-					Assert.AreEqual(PlayerMovement.DEFAULT_DASH_DISTANCE, movementBehaviour.DashDistance);
+			[Test]
+			public void Vector2_zero_does_nothing()
+			{
+				movementBehaviour = A.PlayerMovement.Interface;
+				movementBehaviour.TransformProvider.Position = new Vector2(2, 5);
 
-				[Test]
-				public void using_constructor_with_invalid_data_default_dash_parameters_have_valid_values()
-				{
-					movementBehaviour = new PlayerMovement(-1, -1, -1);
+				movementBehaviour.PerformMovement(Vector2.zero);
 
-					Assert.AreEqual(PlayerMovement.DEFAULT_DASH_DISTANCE, movementBehaviour.DashDistance);
-					Assert.AreEqual(PlayerMovement.DEFAULT_DASH_DURATION, movementBehaviour.DashDuration);
-					Assert.NotNull(movementBehaviour.DashSpeedCurve);
-				}
+				Assert.AreEqual(new Vector3(2, 5), movementBehaviour.TransformProvider.Position);
+			}
 
-				[Test]
-				public void Vector2_zero_does_nothing()
-				{
-					movementBehaviour.TransformProvider.Position = new Vector2(5, 2);
+			[Test]
+			public void Vector2_right_with_Speed_1_and_DeltaTime_1_moves_1_unit_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour = A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
 
-					movementBehaviour.PerformDash(Vector2.zero);
+				movementBehaviour.PerformMovement(Vector2.right);
 
-					Assert.AreEqual(new Vector3(5, 2), movementBehaviour.TransformProvider.Position);
-				}
+				Assert.AreEqual(new Vector3(1, 0), movementBehaviour.TransformProvider.Position);
+			}
 
-				[Test]
-				public void Vector2_right_with_DashDistance_3_DashDuration_1_default_DashSpeedCurve_and_DeltaTime_1_moves_3_to_the_right()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(1f);
-					movementBehaviour = new PlayerMovement(0, 3, 1, null, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector3.zero;
-					var supposedPosition = new Vector3(3, 0);
+			[Test]
+			public void Vector2_up_with_Speed_1_and_DeltaTime_1_moves_1_unit_vertically()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour = A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
 
-					// perform dash. couple of times?
-					movementBehaviour.PerformDash(new Vector2(3, 0));
-					movementBehaviour.PerformMovement(Vector2.one);
+				movementBehaviour.PerformMovement(Vector2.up);
 
-					//check for things
-					Assert.AreEqual(supposedPosition, movementBehaviour.TransformProvider.Position);
-				}
+				Assert.AreEqual(new Vector3(0, 1), movementBehaviour.TransformProvider.Position);
+			}
 
-				[Test]
-				public void Vector2_right_with_DashDistance_3_DashDuration_1_bell_curve_DashSpeedCurve_and_DeltaTime_0_25_moves_3_to_the_right()
-				{
-					var timeServiceSubstitute = Substitute.For<ITimeService>();
-					timeServiceSubstitute.DeltaTime.Returns(0.25f);
-					var animationCurve = new AnimationCurve(new Keyframe(0, 0),
-						new Keyframe(0.25f, 0.75f), new Keyframe(1, 1));
-					movementBehaviour = new PlayerMovement(0, 3, 1, animationCurve, timeServiceSubstitute);
-					movementBehaviour.TransformProvider.Position = Vector3.zero;
-					var supposedPosition = new Vector3(3, 0);
+			[Test]
+			public void Vector2_right_with_Speed_5_and_DeltaTime_1_moves_1_unit_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour = A.PlayerMovement.WithSpeed(5).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
 
-					// perform dash. couple of times?
-					movementBehaviour.PerformDash(new Vector2(3, 0));
-					movementBehaviour.PerformMovement(Vector2.one);
+				movementBehaviour.PerformMovement(Vector2.right);
 
-					//check for things
-					Assert.AreEqual(supposedPosition, movementBehaviour.TransformProvider.Position);
-				}
+				Assert.AreEqual(new Vector3(5, 0), movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector2_up_with_Speed_5_and_DeltaTime_1_moves_1_unit_vertically()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour = A.PlayerMovement.WithSpeed(5).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
+
+				movementBehaviour.PerformMovement(Vector2.up);
+
+				Assert.AreEqual(new Vector3(0, 5), movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void random_Vector2_with_only_x_coordinate_with_Speed_1_and_DeltaTime_1_still_moves_1_unit_in_the_correct_direction()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour =  A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
+				var movementDirection = new Vector2(Random.Range(0, 10000f), 0);
+
+				movementBehaviour.PerformMovement(movementDirection);
+
+				Assert.AreEqual(new Vector3(1, 0), movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void random_Vector2_with_only_y_coordinate_with_Speed_1_and_DeltaTime_1_still_moves_1_unit_in_the_correct_direction()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour =  A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
+				var movementDirection = new Vector2(0, Random.Range(0, 10000f));
+
+				movementBehaviour.PerformMovement(movementDirection);
+
+				Assert.AreEqual(new Vector3(0, 1), movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector2_right_with_Speed_1_and_DeltaTime_05_moves_05_unit_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(0.5f);
+				movementBehaviour =  A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
+
+				movementBehaviour.PerformMovement(Vector2.right);
+
+				Assert.AreEqual(new Vector3(0.5f, 0), movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector2_up_with_Speed_1_and_DeltaTime_05_moves_05_unit_vertically()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(0.5f);
+				movementBehaviour =  A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
+
+				movementBehaviour.PerformMovement(Vector2.up);
+
+				Assert.AreEqual(new Vector3(0, 0.5f), movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector3_with_only_z_coordinate_does_nothing()
+			{
+				movementBehaviour = A.PlayerMovement.Interface;
+				var position = movementBehaviour.TransformProvider.Position;
+
+				movementBehaviour.PerformMovement(new Vector3(0, 0, 20));
+
+				Assert.AreEqual(position, movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void non_zero_Vector2_followed_by_Vector2_zero_both_with_Speed_1_and_DeltaTime_1_moves_in_a_non_zero_Vector2_direction_according_to_speed()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour =  A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Position = Vector2.zero;
+				var movementDirection = new Vector3(Random.Range(0, 10000f), Random.Range(0, 10000f));
+
+				movementBehaviour.PerformMovement(movementDirection);
+				movementBehaviour.PerformMovement(Vector2.zero);
+
+				Assert.AreEqual(movementDirection.normalized, movementBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void when_rotated_Vector_right_moves_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				movementBehaviour =  A.PlayerMovement.WithSpeed(1).With(timeServiceSubstitute).Interface;
+				movementBehaviour.TransformProvider.Rotation = Quaternion.identity;
+				var supposedPosition = movementBehaviour.TransformProvider.Position +
+					movementBehaviour.Speed * new Vector3(1, 0);
+
+				movementBehaviour.TransformProvider.Rotate(Vector3.forward, 90);
+				movementBehaviour.PerformMovement(Vector2.right);
+
+				Assert.AreEqual(supposedPosition, movementBehaviour.TransformProvider.Position);
+			}
+		}
+
+		public sealed class Dashing
+		{
+			private IDashingBehaviour dashingBehaviour;
+
+			[SetUp]
+			public void DashingSetup() => dashingBehaviour = A.PlayerDashing.Interface;
+
+			[Test]
+			public void default_DashDistance_is_greater_than_zero() => Assert.Greater(dashingBehaviour.DashDistance, 0);
+
+			[Test]
+			public void default_DashDistance_has_the_value_of_DEFAULT_DASH_SPEED_constant() =>
+				Assert.AreEqual(PlayerDashing.DEFAULT_DASH_DISTANCE, dashingBehaviour.DashDistance);
+
+			[Test]
+			public void using_constructor_with_invalid_data_default_dash_parameters_have_valid_values()
+			{
+				dashingBehaviour = A.PlayerDashing.WithDistance(-1).WithDuration(-1).Interface;
+
+				Assert.AreEqual(PlayerDashing.DEFAULT_DASH_DISTANCE, dashingBehaviour.DashDistance);
+				Assert.AreEqual(PlayerDashing.DEFAULT_DASH_DURATION, dashingBehaviour.DashDuration);
+				Assert.NotNull(dashingBehaviour.DashMovementCurve);
+			}
+
+			[Test]
+			public void Vector2_zero_does_nothing()
+			{
+				dashingBehaviour.TransformProvider.Position = new Vector2(5, 2);
+
+				dashingBehaviour.PerformDash(Vector2.zero);
+
+				Assert.AreEqual(new Vector3(5, 2), dashingBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector2_right_with_DashDistance_3_DashDuration_1_default_DashSpeedCurve_and_DeltaTime_1_moves_3_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1f);
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).With(timeServiceSubstitute).Interface;
+				dashingBehaviour.TransformProvider.Position = Vector3.zero;
+				var supposedPosition = new Vector3(3, 0);
+
+				dashingBehaviour.PerformDash(Vector2.right);
+
+				Assert.AreEqual(supposedPosition, dashingBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector2_right_with_DashDistance_3_DashDuration_1_bell_curve_DashSpeedCurve_and_DeltaTime_0_25_moves_3_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(0.25f);
+				var animationCurve = new AnimationCurve(new Keyframe(0, 0),
+					new Keyframe(0.25f, 0.75f), new Keyframe(1, 1));
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).WithCurve(animationCurve)
+					.With(timeServiceSubstitute).Interface;
+				dashingBehaviour.TransformProvider.Position = Vector3.zero;
+				var supposedPosition = new Vector3(3, 0);
+
+				dashingBehaviour.PerformDash(Vector2.right);
+
+				Assert.AreEqual(supposedPosition, dashingBehaviour.TransformProvider.Position);
+			}
+
+			[Test]
+			public void Vector2_right_with_DashDistance_3_DashDuration_1_default_DashSpeedCurve_and_DeltaTime_0_01666_moves_3_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1 / 60f);
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).With(timeServiceSubstitute).Interface;
+				dashingBehaviour.TransformProvider.Position = Vector3.zero;
+				var supposedPosition = new Vector3(3, 0);
+
+				dashingBehaviour.PerformDash(Vector2.right);
+
+				const float tolerance = 0.001f;
+				var actualPosition = dashingBehaviour.TransformProvider.Position;
+				var approximatelyEqual = Math.Abs(supposedPosition.x - actualPosition.x) < tolerance &&
+					Math.Abs(supposedPosition.y - actualPosition.y) < tolerance &&
+					Math.Abs(supposedPosition.z - actualPosition.z) < tolerance;
+				Assert.IsTrue(approximatelyEqual, $"expected: {supposedPosition}, actual: {actualPosition}");
+			}
+
+			[Test]
+			public void Vector2_right_with_DashDistance_3_DashDuration_1_bell_curve_DashSpeedCurve_and_DeltaTime_0_01666_moves_3_to_the_right()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1 / 60f);
+				var animationCurve = new AnimationCurve(new Keyframe(0, 0),
+					new Keyframe(0.25f, 0.75f), new Keyframe(1, 1));
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).WithCurve(animationCurve)
+					.With(timeServiceSubstitute).Interface;
+				dashingBehaviour.TransformProvider.Position = Vector3.zero;
+				var supposedPosition = new Vector3(3, 0);
+
+				dashingBehaviour.PerformDash(Vector2.right);
+
+				const float tolerance = 0.001f;
+				var actualPosition = dashingBehaviour.TransformProvider.Position;
+				var approximatelyEqual = Math.Abs(supposedPosition.x - actualPosition.x) < tolerance &&
+					Math.Abs(supposedPosition.y - actualPosition.y) < tolerance &&
+					Math.Abs(supposedPosition.z - actualPosition.z) < tolerance;
+				Assert.IsTrue(approximatelyEqual, $"expected: {supposedPosition}, actual: {actualPosition}");
 			}
 		}
 
@@ -539,17 +562,17 @@ namespace Tests.TDDPlayer
 			private static ILookingBehaviour lookingBehaviour;
 
 			[SetUp]
-			public static void LookingSetup() => lookingBehaviour = new PlayerLooking();
+			public static void LookingSetup() => lookingBehaviour = A.PlayerLooking.Interface;
 
 			public sealed class PerformLookingAtScreenPositionMethod
 			{
 				[Test]
 				public void Vector2_with_the_same_screen_position_does_nothing()
 				{
-					var worldToScreenProvider = Substitute.For<IWorldToScreenProvider>();
-					worldToScreenProvider.Get(Arg.Any<Vector2>())
+					var worldToScreenProviderSubstitute = Substitute.For<IWorldToScreenProvider>();
+					worldToScreenProviderSubstitute.Get(Arg.Any<Vector2>())
 						.Returns(new Vector2(200, 500));
-					lookingBehaviour = new PlayerLooking(worldToScreenProvider);
+					lookingBehaviour = A.PlayerLooking.With(worldToScreenProviderSubstitute).Interface;
 					lookingBehaviour.TransformProvider.Rotation = Quaternion.Euler(0, 0, 50);
 					var originalRotationEuler = lookingBehaviour.TransformProvider.Rotation.eulerAngles;
 
@@ -561,10 +584,10 @@ namespace Tests.TDDPlayer
 				[Test]
 				public void Vector2_zero_when_positioned_in_the_center_of_the_screen_rotates_correctly()
 				{
-					var worldToScreenProvider = Substitute.For<IWorldToScreenProvider>();
-					worldToScreenProvider.Get(Arg.Any<Vector2>())
+					var worldToScreenProviderSubstitute = Substitute.For<IWorldToScreenProvider>();
+					worldToScreenProviderSubstitute.Get(Arg.Any<Vector2>())
 						.Returns(new Vector2(Screen.width / 2f, Screen.height / 2f));
-					lookingBehaviour = new PlayerLooking(worldToScreenProvider);
+					lookingBehaviour = A.PlayerLooking.With(worldToScreenProviderSubstitute).Interface;
 					var supposedRotationEuler = Quaternion.FromToRotation(Vector3.up,
 						-new Vector2(Screen.width, Screen.height).normalized).eulerAngles;
 
@@ -574,13 +597,12 @@ namespace Tests.TDDPlayer
 				}
 
 				[Test]
-				public void
-					Vector2_with_screen_height_and_width_as_coordinates_when_positioned_in_the_center_of_the_screen_rotates_correctly()
+				public void Vector2_with_screen_height_and_width_as_coordinates_when_positioned_in_the_center_of_the_screen_rotates_correctly()
 				{
-					var worldToScreenProvider = Substitute.For<IWorldToScreenProvider>();
-					worldToScreenProvider.Get(Arg.Any<Vector2>())
+					var worldToScreenProviderSubstitute = Substitute.For<IWorldToScreenProvider>();
+					worldToScreenProviderSubstitute.Get(Arg.Any<Vector2>())
 						.Returns(new Vector2(Screen.width / 2f, Screen.height / 2f));
-					lookingBehaviour = new PlayerLooking(worldToScreenProvider);
+					lookingBehaviour = A.PlayerLooking.With(worldToScreenProviderSubstitute).Interface;
 					var supposedRotationEuler = Quaternion.FromToRotation(Vector3.up,
 						new Vector2(Screen.width, Screen.height).normalized).eulerAngles;
 
@@ -590,13 +612,12 @@ namespace Tests.TDDPlayer
 				}
 
 				[Test]
-				public void
-					Vector2_with_negative_values_when_positioned_in_bottom_left_screen_corner_rotates_correctly()
+				public void Vector2_with_negative_values_when_positioned_in_bottom_left_screen_corner_rotates_correctly()
 				{
-					var worldToScreenProvider = Substitute.For<IWorldToScreenProvider>();
-					worldToScreenProvider.Get(Arg.Any<Vector2>())
+					var worldToScreenProviderSubstitute = Substitute.For<IWorldToScreenProvider>();
+					worldToScreenProviderSubstitute.Get(Arg.Any<Vector2>())
 						.Returns(new Vector2(0, 0));
-					lookingBehaviour = new PlayerLooking(worldToScreenProvider);
+					lookingBehaviour = A.PlayerLooking.With(worldToScreenProviderSubstitute).Interface;
 					var supposedRotationEuler = Quaternion.FromToRotation(Vector3.up,
 						new Vector2(-200, -200).normalized).eulerAngles;
 
@@ -608,11 +629,11 @@ namespace Tests.TDDPlayer
 				[Test]
 				public void sequential_Vector2s_when_positioned_in_the_center_of_the_screen_rotates_correctly()
 				{
-					var worldToScreenProvider = Substitute.For<IWorldToScreenProvider>();
+					var worldToScreenProviderSubstitute = Substitute.For<IWorldToScreenProvider>();
 					var screenPosition = new Vector2(Screen.width / 2f, Screen.height / 2f);
-					worldToScreenProvider.Get(Arg.Any<Vector2>())
+					worldToScreenProviderSubstitute.Get(Arg.Any<Vector2>())
 						.Returns(screenPosition);
-					lookingBehaviour = new PlayerLooking(worldToScreenProvider);
+					lookingBehaviour = A.PlayerLooking.With(worldToScreenProviderSubstitute).Interface;
 
 					for (var y = 0; y < 1000; y++)
 					{

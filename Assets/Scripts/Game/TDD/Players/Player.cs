@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.TDD.GameSystemServices;
+using Game.TDD.Players.Dashing;
 using Game.TDD.Players.Input;
 using UnityEngine;
 using DeviceType = Game.TDD.Players.Input.DeviceType;
@@ -17,17 +18,20 @@ namespace Game.TDD.Players
 
 		public IInputBehaviour InputBehaviour { get; }
 		public IMovementBehaviour MovementBehaviour { get; }
+		public IDashingBehaviour DashingBehaviour { get; }
 		public ILookingBehaviour LookingBehaviour { get; }
 		public ITransformProvider TransformProvider { get; set; }
 
 		#region Constructors
 
 		public Player(ITransformProvider transformProvider = null, IInputBehaviour inputBehaviour = null,
-			IMovementBehaviour movementBehaviour = null, ILookingBehaviour lookingBehaviour = null)
+			IMovementBehaviour movementBehaviour = null, IDashingBehaviour dashingBehaviour = null,
+			ILookingBehaviour lookingBehaviour = null)
 		{
 			if (transformProvider == null)
 			{
 				if (movementBehaviour != null) TransformProvider = movementBehaviour.TransformProvider;
+				else if (dashingBehaviour != null) TransformProvider = dashingBehaviour.TransformProvider;
 				else if (lookingBehaviour != null) TransformProvider = lookingBehaviour.TransformProvider;
 				else TransformProvider = new UnityTransformProvider(new GameObject("Player").transform);
 			}
@@ -40,6 +44,12 @@ namespace Game.TDD.Players
 				MovementBehaviour.TransformProvider = TransformProvider;
 			}
 			else MovementBehaviour = new PlayerMovement(TransformProvider);
+			if (dashingBehaviour != null)
+			{
+				DashingBehaviour = dashingBehaviour;
+				DashingBehaviour.TransformProvider = TransformProvider;
+			}
+			else DashingBehaviour = new PlayerDashing(TransformProvider);
 
 			if (lookingBehaviour != null)
 			{
@@ -54,14 +64,15 @@ namespace Game.TDD.Players
 		}
 
 		public Player(Transform transform, IInputBehaviour inputBehaviour = null,
-			IMovementBehaviour movementBehaviour = null, ILookingBehaviour lookingBehaviour = null)
-			: this(new UnityTransformProvider(transform), inputBehaviour, movementBehaviour, lookingBehaviour) {}
+			IMovementBehaviour movementBehaviour = null, IDashingBehaviour dashingBehaviour = null,
+			ILookingBehaviour lookingBehaviour = null) : this(new UnityTransformProvider(transform), inputBehaviour,
+			movementBehaviour, dashingBehaviour, lookingBehaviour) {}
 
 		#endregion
 
 		private void Init()
 		{
-			InputBehaviour.Dash += (sender, args) => MovementBehaviour.PerformDash(args.Value);
+			InputBehaviour.Dash += (sender, args) => DashingBehaviour.PerformDash(args.Value);
 
 			performLookingActions = new Dictionary<DeviceType, Action<Vector2>>
 			{

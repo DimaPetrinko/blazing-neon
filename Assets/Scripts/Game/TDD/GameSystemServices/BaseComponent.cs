@@ -13,7 +13,7 @@ namespace Game.TDD.GameSystemServices
 
 		private void Awake()
 		{
-			if (createInstanceOnAwake) CreateInstance();
+			if (createInstanceOnAwake) instance = CreateInstance();
 		}
 
 		protected abstract T CreateInstance();
