@@ -73,7 +73,8 @@ namespace Game.TDD.Players.Input
 			LookDeviceType = deviceType;
 		}
 
-		public void SetMovementDirection(Vector2 newMovementDirection) => MovementDirection = newMovementDirection.normalized;
+		public void SetMovementDirection(Vector2 newMovementDirection) =>
+			MovementDirection = newMovementDirection.normalized;
 	}
 
 	public sealed class Vector2EventArgs : EventArgs

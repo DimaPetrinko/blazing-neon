@@ -1,4 +1,5 @@
 using Game.TDD.GameSystemServices;
+using Game.TDD.GameSystemServices.TransformProviders;
 using UnityEngine;
 
 namespace Game.TDD.Players.Movement
@@ -43,8 +44,7 @@ namespace Game.TDD.Players.Movement
 		public void PerformMovement(Vector2 movementDirection)
 		{
 			if (movementDirection == Vector2.zero) return;
-			movementDirection.Normalize();
-			var movementVector = Speed * TimeService.DeltaTime * movementDirection;
+			var movementVector = Speed * TimeService.DeltaTime * movementDirection.normalized;
 			TransformProvider.Translate(movementVector, Space.World);
 		}
 	}

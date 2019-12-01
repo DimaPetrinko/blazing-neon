@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9709a7a8bb6c4d71ad8ac9d8073cd5f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 1
+  createInstanceOnAwake: 0
   speed: 10
 --- !u!114 &5473795474256831515
 MonoBehaviour:
@@ -60,7 +60,7 @@ MonoBehaviour:
   createInstanceOnAwake: 0
   distance: 3.5
   speed: 20
-  cooldown: 1
+  cooldown: 0.7
   movementCurve:
     serializedVersion: 2
     m_Curve:
@@ -114,11 +114,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6787032753006636151, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
-        type: 3}
-      propertyPath: m_Name
-      value: TDDPlayer
-      objectReference: {fileID: 0}
     - target: {fileID: 6787032753006636104, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -173,6 +168,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787032753006636151, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: m_Name
+      value: TDDPlayer
       objectReference: {fileID: 0}
     - target: {fileID: 6787032753364491517, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}

@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Threading;
 using Game.TDD.GameSystemServices;
+using Game.TDD.GameSystemServices.CoroutineRunners;
+using Game.TDD.GameSystemServices.TransformProviders;
 using Game.TDD.Players.Dashing;
 using Game.TDD.Players.Input;
 using Game.TDD.Players.Looking;
@@ -610,18 +612,13 @@ namespace Tests.TDDPlayer
 				var transformProviderSubstitute = new DefaultTransformProvider();
 				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithSpeed(1).WithCooldown(1)
 					.With(transformProviderSubstitute).With(timeServiceSubstitute)
-					.With(new DefaultCoroutineRunner(false)).Interface;
+					.With(new AsyncCoroutineRunner()).Interface;
 				dashingBehaviour.TransformProvider.Position = Vector3.zero;
 				var originalPosition = dashingBehaviour.TransformProvider.Position;
 
-				var originalPriority = Thread.CurrentThread.Priority;
 				dashingBehaviour.PerformDash(Vector2.right);
-				Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-				Thread.Sleep(500);
 				var supposedPosition = dashingBehaviour.TransformProvider.Position;
 				dashingBehaviour.PerformDash(Vector2.right);
-				
-				Thread.CurrentThread.Priority = originalPriority;
 				
 				const float tolerance = 0.001f;
 				var actualPosition = dashingBehaviour.TransformProvider.Position;
@@ -716,16 +713,18 @@ namespace Tests.TDDPlayer
 						.Returns(screenPosition);
 					lookingBehaviour = A.PlayerLooking.With(worldToScreenProviderSubstitute).Interface;
 
-					for (var y = 0; y < 1000; y++)
+					const int step = 2;
+					for (var y = 0; y < Screen.height; y += step)
 					{
-						for (var x = 0; x < 1000; x++)
+						for (var x = 0; x < Screen.width; x += step)
 						{
 							var mousePosition = new Vector2(x, y);
 							var supposedRotationEuler = Quaternion.FromToRotation(Vector3.up,
 								mousePosition - screenPosition).eulerAngles;
 							lookingBehaviour.PerformLookingAtPosition(mousePosition);
 							Assert.AreEqual(supposedRotationEuler,
-								lookingBehaviour.TransformProvider.Rotation.eulerAngles);
+								lookingBehaviour.TransformProvider.Rotation.eulerAngles,
+								$"For position {mousePosition}");
 						}
 					}
 				}

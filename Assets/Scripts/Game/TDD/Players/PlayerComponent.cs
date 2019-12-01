@@ -20,5 +20,7 @@ namespace Game.TDD.Players
 			lookingBehaviourComponent.Instance);
 
 		private void FixedUpdate() => Instance.FixedUpdate();
+
+		private void OnDestroy() => Instance.OnDestroy();
 	}
 }

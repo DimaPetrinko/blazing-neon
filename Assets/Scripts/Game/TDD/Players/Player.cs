@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.TDD.GameSystemServices;
+using Game.TDD.GameSystemServices.TransformProviders;
 using Game.TDD.Players.Dashing;
 using Game.TDD.Players.Input;
 using UnityEngine;
@@ -72,7 +73,7 @@ namespace Game.TDD.Players
 
 		private void Init()
 		{
-			InputBehaviour.Dash += (sender, args) => DashingBehaviour.PerformDash(args.Value);
+			InputBehaviour.Dash += DashEventHandler;
 
 			performLookingActions = new Dictionary<DeviceType, Action<Vector2>>
 			{
@@ -81,6 +82,8 @@ namespace Game.TDD.Players
 			};
 		}
 
+		private void DashEventHandler(object sender, Vector2EventArgs args) => DashingBehaviour.PerformDash(args.Value);
+
 		public void FixedUpdate()
 		{
 			if (!DashingBehaviour.IsDashing) MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
@@ -88,5 +91,7 @@ namespace Game.TDD.Players
 			if (performLookingActions.ContainsKey(InputBehaviour.LookDeviceType))
 				performLookingActions[InputBehaviour.LookDeviceType].Invoke(InputBehaviour.LookDirection);
 		}
+		
+		public void OnDestroy() => InputBehaviour.Dash -= DashEventHandler;
 	}
 }

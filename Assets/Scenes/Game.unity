@@ -128,10 +128,20 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 221344796114866394, guid: 14740f974f1599748bf15a0215ccc586,
+        type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 519420031}
     - target: {fileID: 4223506175132725268, guid: 14740f974f1599748bf15a0215ccc586,
         type: 3}
       propertyPath: m_Name
       value: TDDPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5473795474256831515, guid: 14740f974f1599748bf15a0215ccc586,
+        type: 3}
+      propertyPath: duration
+      value: 0.26666668
       objectReference: {fileID: 0}
     - target: {fileID: 7624996962422399626, guid: 14740f974f1599748bf15a0215ccc586,
         type: 3}
@@ -192,16 +202,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RootOrder
       value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 221344796114866394, guid: 14740f974f1599748bf15a0215ccc586,
-        type: 3}
-      propertyPath: cam
-      value: 
-      objectReference: {fileID: 519420031}
-    - target: {fileID: 5473795474256831515, guid: 14740f974f1599748bf15a0215ccc586,
-        type: 3}
-      propertyPath: duration
-      value: 0.26666668
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 14740f974f1599748bf15a0215ccc586, type: 3}
@@ -295,11 +295,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6787032753006636151, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 6787032753006636104, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}
       propertyPath: m_RootOrder
@@ -319,6 +314,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787032753006636151, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: m_Name
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83, type: 3}
