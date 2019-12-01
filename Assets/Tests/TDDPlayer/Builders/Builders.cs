@@ -94,22 +94,29 @@ namespace Tests.TDDPlayer.Builders
 
 	public sealed class PlayerDashingBuilder : InterfacedBuilder<PlayerDashing, IDashingBehaviour>
 	{
-		private float dashDistance = -1;
-		private float dashDuration = -1;
+		private float distance = -1;
+		private float speed = -1;
+		private int cooldown = -1;
 		private AnimationCurve dashSpeedCurve;
 		private ITimeService timeService;
 		private ICoroutineRunner coroutineRunner;
 		private ITransformProvider transformProvider;
 
-		public PlayerDashingBuilder WithDistance(float dashDistance)
+		public PlayerDashingBuilder WithDistance(float distance)
 		{
-			this.dashDistance = dashDistance;
+			this.distance = distance;
 			return this;
 		}
 		
-		public PlayerDashingBuilder WithDuration(float dashDuration)
+		public PlayerDashingBuilder WithSpeed(float speed)
 		{
-			this.dashDuration = dashDuration;
+			this.speed = speed;
+			return this;
+		}
+
+		public PlayerDashingBuilder WithCooldown(int cooldown)
+		{
+			this.cooldown = cooldown;
 			return this;
 		}
 		
@@ -143,7 +150,7 @@ namespace Tests.TDDPlayer.Builders
 			return this;
 		}
 
-		public override PlayerDashing Build() => new PlayerDashing(dashDistance, dashDuration, dashSpeedCurve,
+		public override PlayerDashing Build() => new PlayerDashing(distance, speed, cooldown, dashSpeedCurve,
 			timeService, coroutineRunner, transformProvider);
 	}
 

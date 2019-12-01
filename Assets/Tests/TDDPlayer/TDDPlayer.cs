@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Threading;
 using Game.TDD.GameSystemServices;
 using Game.TDD.Players.Dashing;
 using Game.TDD.Players.Input;
@@ -12,6 +14,7 @@ using DeviceType = Game.TDD.Players.Input.DeviceType;
 using Player = Game.TDD.Players.Player;
 using PlayerMovement = Game.TDD.Players.Movement.PlayerMovement;
 using Random = UnityEngine.Random;
+using ThreadPriority = System.Threading.ThreadPriority;
 
 namespace Tests.TDDPlayer
 {
@@ -165,6 +168,44 @@ namespace Tests.TDDPlayer
 				player.FixedUpdate();
 
 				Assert.AreEqual(originalRotationEuler, player.TransformProvider.Rotation.eulerAngles);
+			}
+
+			[Test]
+			public void while_not_dashing_can_move()
+			{
+				var dashingBehaviourSubstitute = Substitute.For<IDashingBehaviour>();
+				dashingBehaviourSubstitute.IsDashing.Returns(false);
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				var inputBehaviourSubstitute = Substitute.For<IInputBehaviour>();
+				inputBehaviourSubstitute.MovementDirection.Returns(Vector2.right);
+				player = A.Player.With(A.PlayerMovement.With(timeServiceSubstitute).Interface)
+					.With(dashingBehaviourSubstitute).With(inputBehaviourSubstitute);
+				var originalPosition = new Vector3(5, 2);
+				player.TransformProvider.Position = originalPosition;
+
+				player.FixedUpdate();
+
+				Assert.AreNotEqual(originalPosition, player.TransformProvider.Position);
+			}
+
+			[Test]
+			public void while_dashing_cannot_move()
+			{
+				var dashingBehaviourSubstitute = Substitute.For<IDashingBehaviour>();
+				dashingBehaviourSubstitute.IsDashing.Returns(true);
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1);
+				var inputBehaviourSubstitute = Substitute.For<IInputBehaviour>();
+				inputBehaviourSubstitute.MovementDirection.Returns(Vector2.right);
+				player = A.Player.With(A.PlayerMovement.With(timeServiceSubstitute).Interface)
+					.With(dashingBehaviourSubstitute).With(inputBehaviourSubstitute);
+				var originalPosition = new Vector3(5, 2);
+				player.TransformProvider.Position = originalPosition;
+
+				player.FixedUpdate();
+
+				Assert.AreEqual(originalPosition, player.TransformProvider.Position);
 			}
 		}
 
@@ -434,7 +475,7 @@ namespace Tests.TDDPlayer
 			}
 
 			[Test]
-			public void when_rotated_Vector_right_moves_to_the_right()
+			public void Vector_right_transform_when_rotated_moves_to_the_right()
 			{
 				var timeServiceSubstitute = Substitute.For<ITimeService>();
 				timeServiceSubstitute.DeltaTime.Returns(1);
@@ -454,29 +495,34 @@ namespace Tests.TDDPlayer
 		{
 			private IDashingBehaviour dashingBehaviour;
 
-			[SetUp]
-			public void DashingSetup() => dashingBehaviour = A.PlayerDashing.Interface;
+			[Test]
+			public void default_DashDistance_is_greater_than_zero()
+			{
+				dashingBehaviour = A.PlayerDashing.Interface;
+				Assert.Greater(dashingBehaviour.Distance, 0);
+			}
 
 			[Test]
-			public void default_DashDistance_is_greater_than_zero() => Assert.Greater(dashingBehaviour.DashDistance, 0);
-
-			[Test]
-			public void default_DashDistance_has_the_value_of_DEFAULT_DASH_SPEED_constant() =>
-				Assert.AreEqual(PlayerDashing.DEFAULT_DASH_DISTANCE, dashingBehaviour.DashDistance);
+			public void default_DashDistance_has_the_value_of_DEFAULT_DASH_SPEED_constant()
+			{
+				dashingBehaviour = A.PlayerDashing.Interface;
+				Assert.AreEqual(PlayerDashing.DEFAULT_DISTANCE, dashingBehaviour.Distance);
+			}
 
 			[Test]
 			public void using_constructor_with_invalid_data_default_dash_parameters_have_valid_values()
 			{
-				dashingBehaviour = A.PlayerDashing.WithDistance(-1).WithDuration(-1).Interface;
+				dashingBehaviour = A.PlayerDashing.WithDistance(-1).WithSpeed(-1).Interface;
 
-				Assert.AreEqual(PlayerDashing.DEFAULT_DASH_DISTANCE, dashingBehaviour.DashDistance);
-				Assert.AreEqual(PlayerDashing.DEFAULT_DASH_DURATION, dashingBehaviour.DashDuration);
-				Assert.NotNull(dashingBehaviour.DashMovementCurve);
+				Assert.AreEqual(PlayerDashing.DEFAULT_DISTANCE, dashingBehaviour.Distance);
+				Assert.AreEqual(PlayerDashing.DEFAULT_SPEED, dashingBehaviour.Speed);
+				Assert.NotNull(dashingBehaviour.MovementCurve);
 			}
 
 			[Test]
 			public void Vector2_zero_does_nothing()
 			{
+				dashingBehaviour = A.PlayerDashing.Interface;
 				dashingBehaviour.TransformProvider.Position = new Vector2(5, 2);
 
 				dashingBehaviour.PerformDash(Vector2.zero);
@@ -485,11 +531,11 @@ namespace Tests.TDDPlayer
 			}
 
 			[Test]
-			public void Vector2_right_with_DashDistance_3_DashDuration_1_default_DashSpeedCurve_and_DeltaTime_1_moves_3_to_the_right()
+			public void Vector2_right_with_Distance_3_Speed_5_default_DashSpeedCurve_and_DeltaTime_1_moves_3_to_the_right()
 			{
 				var timeServiceSubstitute = Substitute.For<ITimeService>();
 				timeServiceSubstitute.DeltaTime.Returns(1f);
-				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).With(timeServiceSubstitute).Interface;
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithSpeed(2).With(timeServiceSubstitute).Interface;
 				dashingBehaviour.TransformProvider.Position = Vector3.zero;
 				var supposedPosition = new Vector3(3, 0);
 
@@ -499,13 +545,13 @@ namespace Tests.TDDPlayer
 			}
 
 			[Test]
-			public void Vector2_right_with_DashDistance_3_DashDuration_1_bell_curve_DashSpeedCurve_and_DeltaTime_0_25_moves_3_to_the_right()
+			public void Vector2_right_with_Distance_3_Speed_5_bell_curve_DashSpeedCurve_and_DeltaTime_0_25_moves_3_to_the_right()
 			{
 				var timeServiceSubstitute = Substitute.For<ITimeService>();
 				timeServiceSubstitute.DeltaTime.Returns(0.25f);
 				var animationCurve = new AnimationCurve(new Keyframe(0, 0),
 					new Keyframe(0.25f, 0.75f), new Keyframe(1, 1));
-				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).WithCurve(animationCurve)
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithSpeed(5).WithCurve(animationCurve)
 					.With(timeServiceSubstitute).Interface;
 				dashingBehaviour.TransformProvider.Position = Vector3.zero;
 				var supposedPosition = new Vector3(3, 0);
@@ -516,11 +562,11 @@ namespace Tests.TDDPlayer
 			}
 
 			[Test]
-			public void Vector2_right_with_DashDistance_3_DashDuration_1_default_DashSpeedCurve_and_DeltaTime_0_01666_moves_3_to_the_right()
+			public void Vector2_right_with_Distance_3_Speed_5_default_DashSpeedCurve_and_DeltaTime_0_01666_moves_3_to_the_right()
 			{
 				var timeServiceSubstitute = Substitute.For<ITimeService>();
 				timeServiceSubstitute.DeltaTime.Returns(1 / 60f);
-				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).With(timeServiceSubstitute).Interface;
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithSpeed(5).With(timeServiceSubstitute).Interface;
 				dashingBehaviour.TransformProvider.Position = Vector3.zero;
 				var supposedPosition = new Vector3(3, 0);
 
@@ -535,13 +581,13 @@ namespace Tests.TDDPlayer
 			}
 
 			[Test]
-			public void Vector2_right_with_DashDistance_3_DashDuration_1_bell_curve_DashSpeedCurve_and_DeltaTime_0_01666_moves_3_to_the_right()
+			public void Vector2_right_with_Distance_3_Speed_15_bell_curve_DashSpeedCurve_and_DeltaTime_0_01666_moves_3_to_the_right()
 			{
 				var timeServiceSubstitute = Substitute.For<ITimeService>();
 				timeServiceSubstitute.DeltaTime.Returns(1 / 60f);
 				var animationCurve = new AnimationCurve(new Keyframe(0, 0),
 					new Keyframe(0.25f, 0.75f), new Keyframe(1, 1));
-				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithDuration(1).WithCurve(animationCurve)
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithSpeed(15).WithCurve(animationCurve)
 					.With(timeServiceSubstitute).Interface;
 				dashingBehaviour.TransformProvider.Position = Vector3.zero;
 				var supposedPosition = new Vector3(3, 0);
@@ -554,6 +600,41 @@ namespace Tests.TDDPlayer
 					Math.Abs(supposedPosition.y - actualPosition.y) < tolerance &&
 					Math.Abs(supposedPosition.z - actualPosition.z) < tolerance;
 				Assert.IsTrue(approximatelyEqual, $"expected: {supposedPosition}, actual: {actualPosition}");
+			}
+
+			[Test]
+			public void PerformDash_with_non_zero_cooldown_causes_all_subsequent_PerformDashes_to_do_nothing()
+			{
+				var timeServiceSubstitute = Substitute.For<ITimeService>();
+				timeServiceSubstitute.DeltaTime.Returns(1 / 60f);
+				var transformProviderSubstitute = new DefaultTransformProvider();
+				dashingBehaviour = A.PlayerDashing.WithDistance(3).WithSpeed(1).WithCooldown(1)
+					.With(transformProviderSubstitute).With(timeServiceSubstitute)
+					.With(new DefaultCoroutineRunner(false)).Interface;
+				dashingBehaviour.TransformProvider.Position = Vector3.zero;
+				var originalPosition = dashingBehaviour.TransformProvider.Position;
+
+				var originalPriority = Thread.CurrentThread.Priority;
+				dashingBehaviour.PerformDash(Vector2.right);
+				Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+				Thread.Sleep(500);
+				var supposedPosition = dashingBehaviour.TransformProvider.Position;
+				dashingBehaviour.PerformDash(Vector2.right);
+				
+				Thread.CurrentThread.Priority = originalPriority;
+				
+				const float tolerance = 0.001f;
+				var actualPosition = dashingBehaviour.TransformProvider.Position;
+				var actualPositionIsEqualToOriginal = Math.Abs(originalPosition.x - actualPosition.x) < tolerance &&
+					Math.Abs(originalPosition.y - actualPosition.y) < tolerance &&
+					Math.Abs(originalPosition.z - actualPosition.z) < tolerance;
+				Assert.IsFalse(actualPositionIsEqualToOriginal,
+					$"expected: {supposedPosition}, actual: {actualPosition}");
+				var actualPositionIsEqualToSupposed = Math.Abs(supposedPosition.x - actualPosition.x) < tolerance &&
+					Math.Abs(supposedPosition.y - actualPosition.y) < tolerance &&
+					Math.Abs(supposedPosition.z - actualPosition.z) < tolerance;
+				Assert.IsTrue(actualPositionIsEqualToSupposed,
+					$"expected: {supposedPosition}, actual: {actualPosition}");
 			}
 		}
 

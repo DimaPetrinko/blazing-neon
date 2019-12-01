@@ -6,9 +6,9 @@ namespace Game.TDD.Players.Dashing
 	public abstract class BaseDashingComponent : BaseComponent<IDashingBehaviour>
 	{
 		[Header("Base dashing component")]
-		[SerializeField] protected float dashDistance = PlayerDashing.DEFAULT_DASH_DISTANCE;
-
-		[SerializeField] protected float dashDuration = PlayerDashing.DEFAULT_DASH_DURATION;
-		[SerializeField] protected AnimationCurve dashSpeedCurve = AnimationCurve.Linear(0, 0, 1, 1);
+		[SerializeField] protected float distance = PlayerDashing.DEFAULT_DISTANCE;
+		[SerializeField] protected float speed = PlayerDashing.DEFAULT_SPEED;
+		[SerializeField] protected float cooldown = PlayerDashing.DEFAULT_COOLDOWN;
+		[SerializeField] protected AnimationCurve movementCurve = AnimationCurve.Linear(0, 0, 1, 1);
 	}
 }

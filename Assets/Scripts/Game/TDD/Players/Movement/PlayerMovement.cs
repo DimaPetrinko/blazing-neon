@@ -7,7 +7,7 @@ namespace Game.TDD.Players.Movement
 	{
 		float Speed { get; }
 		ITransformProvider TransformProvider { get; set; }
-		
+
 		void PerformMovement(Vector2 movementDirection);
 	}
 
@@ -16,7 +16,6 @@ namespace Game.TDD.Players.Movement
 		public const float DEFAULT_SPEED = 1;
 
 		public float Speed { get; }
-
 		public ITransformProvider TransformProvider { get; set; }
 		private ITimeService TimeService { get; }
 

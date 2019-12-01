@@ -27,10 +27,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   createInstanceOnAwake: 1
-  playerInput: {fileID: 7567955810658727640}
-  playerMovementComponent: {fileID: 4266516826282956161}
-  playerDashingComponent: {fileID: 5473795474256831515}
-  playerLookingComponent: {fileID: 221344796114866394}
+  inputBehaviourComponent: {fileID: 7567955810658727640}
+  movementBehaviourComponent: {fileID: 4266516826282956161}
+  dashingBehaviourComponent: {fileID: 5473795474256831515}
+  lookingBehaviourComponent: {fileID: 221344796114866394}
 --- !u!114 &4266516826282956161
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -58,34 +58,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   createInstanceOnAwake: 0
-  dashDistance: 2.5
-  dashDuration: 0.3
-  dashSpeedCurve:
+  distance: 3.5
+  speed: 20
+  cooldown: 1
+  movementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 1.5429623
-      outSlope: 1.5429623
+      inSlope: 0.8750866
+      outSlope: 0.8750866
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.47404742
-      value: 0.7314373
-      inSlope: 1.0267919
-      outSlope: 1.0267919
-      tangentMode: 34
+      time: 0.83912015
+      value: 0.7343028
+      inSlope: 1.2197838
+      outSlope: 1.2197838
+      tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.76580024
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0.5106215
-      outSlope: 0.5106215
+      inSlope: 1.6515255
+      outSlope: 1.6515255
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334

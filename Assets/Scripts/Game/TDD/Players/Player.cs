@@ -83,7 +83,7 @@ namespace Game.TDD.Players
 
 		public void FixedUpdate()
 		{
-			MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
+			if (!DashingBehaviour.IsDashing) MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
 
 			if (performLookingActions.ContainsKey(InputBehaviour.LookDeviceType))
 				performLookingActions[InputBehaviour.LookDeviceType].Invoke(InputBehaviour.LookDirection);
