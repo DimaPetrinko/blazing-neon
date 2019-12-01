@@ -33,11 +33,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 6787032753006636151, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
-        type: 3}
-      propertyPath: m_Name
-      value: PlayerSquare
-      objectReference: {fileID: 0}
     - target: {fileID: 6787032753006636104, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -93,6 +88,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6787032753006636151, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: m_Name
+      value: PlayerSquare
+      objectReference: {fileID: 0}
     - target: {fileID: 6787032753364491514, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -113,6 +113,21 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 6787032753364491517, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787032753364491517, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.69125175
+      objectReference: {fileID: 0}
+    - target: {fileID: 6787032753364491517, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6787032752200850520, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83, type: 3}

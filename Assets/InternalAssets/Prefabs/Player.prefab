@@ -56,10 +56,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6787032753006636104}
-  - component: {fileID: 6787032753006636106}
-  - component: {fileID: 6787032753006636107}
-  - component: {fileID: 6787032753006636105}
-  - component: {fileID: 6693146108326724440}
+  - component: {fileID: 888930019215952719}
+  - component: {fileID: 8811620541293805781}
+  - component: {fileID: 1179294869672044247}
+  - component: {fileID: 2916744821259527052}
+  - component: {fileID: 6393209862440407574}
   - component: {fileID: 6787032753006636150}
   m_Layer: 0
   m_Name: Player
@@ -83,7 +84,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6787032753006636106
+--- !u!114 &888930019215952719
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,10 +93,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 6787032753006636151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e90a2cdd961359448564304355f770b, type: 3}
+  m_Script: {fileID: 11500000, guid: 75706e0a57cc4a42bacb9de3777b617d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6787032753006636107
+  createInstanceOnAwake: 1
+  inputBehaviourComponent: {fileID: 8811620541293805781}
+  movementBehaviourComponent: {fileID: 2916744821259527052}
+  dashingBehaviourComponent: {fileID: 6393209862440407574}
+  lookingBehaviourComponent: {fileID: 1179294869672044247}
+--- !u!114 &8811620541293805781
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,11 +110,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6787032753006636151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27bb76d68699480fac937e03794ace3d, type: 3}
+  m_Script: {fileID: 11500000, guid: e343b20b85e941c487bd8d5866a190e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dashSpeedThreshold: 0.25
---- !u!114 &6787032753006636105
+  createInstanceOnAwake: 0
+--- !u!114 &1179294869672044247
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -117,66 +123,74 @@ MonoBehaviour:
   m_GameObject: {fileID: 6787032753006636151}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 779da87395f84f27a69aec2384d89c37, type: 3}
+  m_Script: {fileID: 11500000, guid: 42c737f0781f4103b06988c012148ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  createInstanceOnAwake: 0
+  cam: {fileID: 0}
+--- !u!114 &2916744821259527052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787032753006636151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9709a7a8bb6c4d71ad8ac9d8073cd5f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createInstanceOnAwake: 0
   speed: 10
-  maxDashSpeed: 25
-  postDashCooldown: 0.7
-  dashSpeedCurve:
+--- !u!114 &6393209862440407574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787032753006636151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dbb5710333941c09a2cfe0664c745f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createInstanceOnAwake: 0
+  distance: 3.5
+  speed: 25
+  cooldown: 0.7
+  movementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 20
-      outSlope: 20
+      inSlope: 0.8750866
+      outSlope: 0.8750866
       tangentMode: 34
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.05
+      time: 0.83912015
+      value: 0.7343028
+      inSlope: 1.2197838
+      outSlope: 1.2197838
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.76580024
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.18586117
-      value: 0.5330399
-      inSlope: -4.96905
-      outSlope: -4.96905
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.31788072
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 0.25
-      value: 0
-      inSlope: -8.310721
-      outSlope: -8.310721
+      inSlope: 1.6515255
+      outSlope: 1.6515255
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &6693146108326724440
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6787032753006636151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07d7b85079b14d26ab021acd8dbb2f23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &6787032753006636150
 Rigidbody2D:
   serializedVersion: 4
@@ -271,7 +285,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0.46568146, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
