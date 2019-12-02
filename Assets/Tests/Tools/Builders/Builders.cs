@@ -1,15 +1,16 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.CoroutineRunners;
-using Game.TDD.GameSystemServices.TransformProviders;
-using Game.TDD.Players;
-using Game.TDD.Players.Dashing;
-using Game.TDD.Players.Input;
-using Game.TDD.Players.Looking;
-using Game.TDD.Players.Movement;
+using Game;
+using Game.GameSystemServices;
+using Game.GameSystemServices.CoroutineRunners;
+using Game.GameSystemServices.TransformProviders;
+using Game.Players;
+using Game.Players.Dashing;
+using Game.Players.Input;
+using Game.Players.Looking;
+using Game.Players.Movement;
 using Input;
 using UnityEngine;
 
-namespace Tests.TDDPlayer.Builders
+namespace Tests.Tools.Builders
 {
 	public static class A
 	{
@@ -20,6 +21,7 @@ namespace Tests.TDDPlayer.Builders
 		public static PlayerLookingBuilder PlayerLooking => new PlayerLookingBuilder();
 		public static UnityTransformProviderBuilder UnityTransformProvider => new UnityTransformProviderBuilder();
 		public static UnityTimeServiceBuilder UnityTimeService => new UnityTimeServiceBuilder();
+		public static CameraFollowBuilder CameraFollow => new CameraFollowBuilder();
 	}
 
 	public abstract class Builder<T> where T : class
@@ -234,5 +236,31 @@ namespace Tests.TDDPlayer.Builders
 
 		protected override Player Build() => new Player(transformProvider, inputBehaviour, movementBehaviour,
 			dashingBehaviour, lookingBehaviour);
+	}
+
+	public sealed class CameraFollowBuilder : Builder<CameraFollow>
+	{
+		private ITransformProvider target;
+		private ITransformProvider transformProvider;
+
+		public CameraFollowBuilder WithTarget(ITransformProvider target)
+		{
+			this.target = target;
+			return this;
+		}
+
+		public CameraFollowBuilder With(ITransformProvider transformProvider)
+		{
+			this.transformProvider = transformProvider;
+			return this;
+		}
+
+		public CameraFollowBuilder With(Transform transform)
+		{
+			transformProvider = A.UnityTransformProvider.With(transform).Interface;
+			return this;
+		}
+
+		protected override CameraFollow Build() => new CameraFollow(target, transformProvider);
 	}
 }
