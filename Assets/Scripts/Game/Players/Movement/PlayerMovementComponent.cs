@@ -1,4 +1,4 @@
-namespace Game.TDD.Players.Movement
+namespace Game.Players.Movement
 {
 	public sealed class PlayerMovementComponent : BaseMovementComponent
 	{

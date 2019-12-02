@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Game.TDD.GameSystemServices.CoroutineRunners
+namespace Game.GameSystemServices.CoroutineRunners
 {
 	public sealed class UnityCoroutineRunner : ICoroutineRunner
 	{

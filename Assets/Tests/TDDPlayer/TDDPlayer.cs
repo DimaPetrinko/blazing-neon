@@ -1,22 +1,19 @@
 using System;
-using System.Collections;
-using System.Threading;
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.CoroutineRunners;
-using Game.TDD.GameSystemServices.TransformProviders;
-using Game.TDD.Players.Dashing;
-using Game.TDD.Players.Input;
-using Game.TDD.Players.Looking;
-using Game.TDD.Players.Movement;
+using Game.GameSystemServices;
+using Game.GameSystemServices.CoroutineRunners;
+using Game.GameSystemServices.TransformProviders;
+using Game.Players.Dashing;
+using Game.Players.Input;
+using Game.Players.Looking;
+using Game.Players.Movement;
 using NSubstitute;
 using NUnit.Framework;
-using Tests.TDDPlayer.Builders;
+using Tests.Tools.Builders;
 using UnityEngine;
-using DeviceType = Game.TDD.Players.Input.DeviceType;
-using Player = Game.TDD.Players.Player;
-using PlayerMovement = Game.TDD.Players.Movement.PlayerMovement;
+using DeviceType = Game.Players.Input.DeviceType;
+using Player = Game.Players.Player;
+using PlayerMovement = Game.Players.Movement.PlayerMovement;
 using Random = UnityEngine.Random;
-using ThreadPriority = System.Threading.ThreadPriority;
 
 namespace Tests.TDDPlayer
 {

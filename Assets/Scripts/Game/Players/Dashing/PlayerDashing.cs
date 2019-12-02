@@ -1,10 +1,10 @@
 using System.Collections;
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.CoroutineRunners;
-using Game.TDD.GameSystemServices.TransformProviders;
+using Game.GameSystemServices;
+using Game.GameSystemServices.CoroutineRunners;
+using Game.GameSystemServices.TransformProviders;
 using UnityEngine;
 
-namespace Game.TDD.Players.Dashing
+namespace Game.Players.Dashing
 {
 	public interface IDashingBehaviour
 	{

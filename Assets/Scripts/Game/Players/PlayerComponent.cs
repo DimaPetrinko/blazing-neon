@@ -1,11 +1,11 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.Players.Dashing;
-using Game.TDD.Players.Input;
-using Game.TDD.Players.Looking;
-using Game.TDD.Players.Movement;
+using Game.GameSystemServices;
+using Game.Players.Dashing;
+using Game.Players.Input;
+using Game.Players.Looking;
+using Game.Players.Movement;
 using UnityEngine;
 
-namespace Game.TDD.Players
+namespace Game.Players
 {
 	public sealed class PlayerComponent : BaseComponent<Player>
 	{

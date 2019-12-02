@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using ThreadPriority = System.Threading.ThreadPriority;
 
-namespace Game.TDD.GameSystemServices.CoroutineRunners
+namespace Game.GameSystemServices.CoroutineRunners
 {
 	public sealed class AsyncCoroutineRunner : ICoroutineRunner
 	{

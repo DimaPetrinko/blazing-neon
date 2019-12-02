@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.TDD.GameSystemServices.TransformProviders
+namespace Game.GameSystemServices.TransformProviders
 {
 	public sealed class DefaultTransformProvider : ITransformProvider
 	{

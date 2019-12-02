@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.TDD.GameSystemServices
+namespace Game.GameSystemServices
 {
 	public abstract class BaseComponent<T> : MonoBehaviour where T : class
 	{

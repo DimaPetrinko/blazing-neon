@@ -1,7 +1,6 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.CoroutineRunners;
+using Game.GameSystemServices.CoroutineRunners;
 
-namespace Game.TDD.Players.Dashing
+namespace Game.Players.Dashing
 {
 	public sealed class PlayerDashingComponent : BaseDashingComponent
 	{

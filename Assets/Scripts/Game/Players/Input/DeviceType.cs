@@ -1,4 +1,4 @@
-namespace Game.TDD.Players.Input
+namespace Game.Players.Input
 {
 	public enum DeviceType
 	{

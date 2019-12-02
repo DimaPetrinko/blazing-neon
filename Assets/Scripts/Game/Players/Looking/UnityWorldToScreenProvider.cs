@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.TDD.Players.Looking
+namespace Game.Players.Looking
 {
 	public interface IWorldToScreenProvider
 	{

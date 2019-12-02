@@ -1,8 +1,7 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.TransformProviders;
+using Game.GameSystemServices.TransformProviders;
 using UnityEngine;
 
-namespace Game.TDD.Players.Looking
+namespace Game.Players.Looking
 {
 	public interface ILookingBehaviour
 	{

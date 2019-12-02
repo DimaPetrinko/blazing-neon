@@ -1,7 +1,7 @@
-using Game.TDD.GameSystemServices;
+using Game.GameSystemServices;
 using UnityEngine;
 
-namespace Game.TDD.Players.Dashing
+namespace Game.Players.Dashing
 {
 	public abstract class BaseDashingComponent : BaseComponent<IDashingBehaviour>
 	{

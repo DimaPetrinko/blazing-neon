@@ -1,7 +1,7 @@
-using Game.TDD.GameSystemServices;
+using Game.GameSystemServices;
 using UnityEngine;
 
-namespace Game.TDD.Players.Movement
+namespace Game.Players.Movement
 {
 	public abstract class BaseMovementComponent : BaseComponent<IMovementBehaviour>
 	{

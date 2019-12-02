@@ -3,7 +3,7 @@ using Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Game.TDD.Players.Input
+namespace Game.Players.Input
 {
 	public interface IInputBehaviour
 	{

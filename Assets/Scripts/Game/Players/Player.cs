@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.TransformProviders;
-using Game.TDD.Players.Dashing;
-using Game.TDD.Players.Input;
+using Game.GameSystemServices;
+using Game.GameSystemServices.TransformProviders;
+using Game.Players.Dashing;
+using Game.Players.Input;
 using UnityEngine;
-using DeviceType = Game.TDD.Players.Input.DeviceType;
-using ILookingBehaviour = Game.TDD.Players.Looking.ILookingBehaviour;
-using IMovementBehaviour = Game.TDD.Players.Movement.IMovementBehaviour;
-using PlayerLooking = Game.TDD.Players.Looking.PlayerLooking;
-using PlayerMovement = Game.TDD.Players.Movement.PlayerMovement;
+using DeviceType = Game.Players.Input.DeviceType;
+using ILookingBehaviour = Game.Players.Looking.ILookingBehaviour;
+using IMovementBehaviour = Game.Players.Movement.IMovementBehaviour;
+using PlayerLooking = Game.Players.Looking.PlayerLooking;
+using PlayerMovement = Game.Players.Movement.PlayerMovement;
 
-namespace Game.TDD.Players
+namespace Game.Players
 {
 	public sealed class Player : ISceneObject
 	{

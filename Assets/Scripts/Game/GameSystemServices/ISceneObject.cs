@@ -1,6 +1,6 @@
-using Game.TDD.GameSystemServices.TransformProviders;
+using Game.GameSystemServices.TransformProviders;
 
-namespace Game.TDD.GameSystemServices
+namespace Game.GameSystemServices
 {
 	public interface ISceneObject
 	{

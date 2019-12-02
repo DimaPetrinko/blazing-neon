@@ -1,8 +1,8 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.TransformProviders;
+using Game.GameSystemServices;
+using Game.GameSystemServices.TransformProviders;
 using UnityEngine;
 
-namespace Game.TDD.Players.Movement
+namespace Game.Players.Movement
 {
 	public interface IMovementBehaviour
 	{

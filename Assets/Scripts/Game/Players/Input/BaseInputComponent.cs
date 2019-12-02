@@ -1,6 +1,6 @@
-using Game.TDD.GameSystemServices;
+using Game.GameSystemServices;
 
-namespace Game.TDD.Players.Input
+namespace Game.Players.Input
 {
 	public abstract class BaseInputComponent : BaseComponent<IInputBehaviour> {}
 }

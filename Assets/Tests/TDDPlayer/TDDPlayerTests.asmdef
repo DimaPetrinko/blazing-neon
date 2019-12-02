@@ -3,7 +3,8 @@
     "references": [
         "neon-blaze",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "TestTools"
     ],
     "includePlatforms": [
         "Editor"
