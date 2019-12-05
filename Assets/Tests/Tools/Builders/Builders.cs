@@ -1,4 +1,5 @@
 using Game;
+using Game.CameraSystem;
 using Game.GameSystemServices;
 using Game.GameSystemServices.CoroutineRunners;
 using Game.GameSystemServices.TransformProviders;
@@ -33,7 +34,7 @@ namespace Tests.Tools.Builders
 	public abstract class InterfacedBuilder<T, I> where T : class, I
 	{
 		public I Interface => (I)Build();
-		public abstract T Build();
+		protected abstract T Build();
 		public static implicit operator T(InterfacedBuilder<T, I> builder) => builder.Build();
 	}
 
@@ -67,7 +68,7 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		public override PlayerMovement Build() => new PlayerMovement(speed, timeService, transformProvider);
+		protected override PlayerMovement Build() => new PlayerMovement(speed, timeService, transformProvider);
 	}
 
 	public sealed class PlayerLookingBuilder : InterfacedBuilder<PlayerLooking, ILookingBehaviour>
@@ -93,7 +94,7 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		public override PlayerLooking Build() => new PlayerLooking(worldToScreenProvider, transformProvider);
+		protected override PlayerLooking Build() => new PlayerLooking(worldToScreenProvider, transformProvider);
 	}
 
 	public sealed class PlayerDashingBuilder : InterfacedBuilder<PlayerDashing, IDashingBehaviour>
@@ -154,7 +155,7 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		public override PlayerDashing Build() => new PlayerDashing(distance, speed, cooldown, dashSpeedCurve,
+		protected override PlayerDashing Build() => new PlayerDashing(distance, speed, cooldown, dashSpeedCurve,
 			timeService, coroutineRunner, transformProvider);
 	}
 
@@ -168,7 +169,7 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		public override PlayerInput Build() => new PlayerInput(inputMaster);
+		protected override PlayerInput Build() => new PlayerInput(inputMaster);
 	}
 
 	public sealed class UnityTransformProviderBuilder : InterfacedBuilder<UnityTransformProvider, ITransformProvider>
@@ -181,13 +182,13 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		public override UnityTransformProvider Build() =>
+		protected override UnityTransformProvider Build() =>
 			new UnityTransformProvider(transform ? transform : new GameObject().transform);
 	}
 	
 	public sealed class UnityTimeServiceBuilder : InterfacedBuilder<UnityTimeService, ITimeService>
 	{
-		public override UnityTimeService Build() => new UnityTimeService();
+		protected override UnityTimeService Build() => new UnityTimeService();
 	}
 
 	public sealed class PlayerBuilder : Builder<Player>
@@ -238,10 +239,23 @@ namespace Tests.Tools.Builders
 			dashingBehaviour, lookingBehaviour);
 	}
 
-	public sealed class CameraFollowBuilder : Builder<CameraFollow>
+	public sealed class CameraFollowBuilder : InterfacedBuilder<CameraFollow, ICameraFollow>
 	{
+		private float smoothing;
 		private ITransformProvider target;
 		private ITransformProvider transformProvider;
+
+		public CameraFollowBuilder WithSmoothing(float smoothing)
+		{
+			this.smoothing = smoothing;
+			return this;
+		}
+
+		public CameraFollowBuilder WithTarget(ISceneObject target)
+		{
+			this.target = target.TransformProvider;
+			return this;
+		}
 
 		public CameraFollowBuilder WithTarget(ITransformProvider target)
 		{
@@ -261,6 +275,6 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		protected override CameraFollow Build() => new CameraFollow(target, transformProvider);
+		protected override CameraFollow Build() => new CameraFollow(smoothing, transformProvider, target);
 	}
 }

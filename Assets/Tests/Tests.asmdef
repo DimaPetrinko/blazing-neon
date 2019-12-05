@@ -1,5 +1,5 @@
 {
-    "name": "TDDPlayerTests",
+    "name": "Tests",
     "references": [
         "neon-blaze",
         "UnityEngine.TestRunner",

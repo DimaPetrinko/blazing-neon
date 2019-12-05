@@ -28,7 +28,7 @@ namespace Game.GameSystemServices.TransformProviders
 
 		public UnityTransformProvider(Transform transform) => this.transform = transform;
 
-		public void Translate(Vector2 byVector, Space space = Space.Self) => transform.Translate(byVector, space);
+		public void Translate(Vector3 byVector, Space space = Space.Self) => transform.Translate(byVector, space);
 
 		public void Rotate(Vector3 axis, float angle, Space space = Space.Self) => transform.Rotate(axis, angle, space);
 
