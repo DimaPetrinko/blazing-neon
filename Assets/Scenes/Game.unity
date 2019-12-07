@@ -173,8 +173,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   createInstanceOnAwake: 1
-  target: {fileID: 333331479}
-  smoothing: 3
+  _target:
+    value: {fileID: 333331479}
+  _smoothing:
+    value: 20
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0

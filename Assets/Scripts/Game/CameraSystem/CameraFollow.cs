@@ -6,8 +6,7 @@ namespace Game.CameraSystem
 {
 	public interface ICameraFollow
 	{
-		float Smoothing { get; }
-		ITimeService TimeService { get; }
+		FloatReference Smoothing { get; }
 		ITransformProvider Target { get; }
 		ITransformProvider TransformProvider { get; set; }
 		void Update();
@@ -17,14 +16,14 @@ namespace Game.CameraSystem
 
 	public sealed class CameraFollow : ICameraFollow
 	{
-		public float Smoothing { get; set; }
+		public FloatReference Smoothing { get; }
 		public ITimeService TimeService { get; }
 		public ITransformProvider Target { get; private set; }
 		public ITransformProvider TransformProvider { get; set; }
 
 		#region Constructors
 
-		public CameraFollow(float smoothing, ITransformProvider transformProvider = null,
+		public CameraFollow(FloatReference smoothing, ITransformProvider transformProvider = null,
 			ITransformProvider target = null, ITimeService timeService = null)
 		{
 			Smoothing = smoothing;
@@ -34,7 +33,7 @@ namespace Game.CameraSystem
 			TimeService = timeService ?? new UnityTimeService();
 		}
 
-		public CameraFollow(float smoothing, ITransformProvider transformProvider = null, ISceneObject target = null,
+		public CameraFollow(FloatReference smoothing, ITransformProvider transformProvider = null, ISceneObject target = null,
 			ITimeService timeService = null) : this(smoothing, transformProvider, target.TransformProvider,
 			timeService) {}
 
@@ -43,13 +42,14 @@ namespace Game.CameraSystem
 		public void Update()
 		{
 			if (Target == null) return;
-			TransformProvider.Position = Smoothing > 0 ? GetSmoothedPosition() : GetMatchPosition();
+			Debug.Log(Target.GameObject.name);
+			TransformProvider.Position = Smoothing.Value > 0 ? GetSmoothedPosition() : GetMatchPosition();
 		}
 
 		private Vector3 GetSmoothedPosition()
 		{
 			var targetPosition = new Vector3(Target.Position.x, Target.Position.y, TransformProvider.Position.z);
-			return Vector3.Lerp(TransformProvider.Position, targetPosition, Smoothing * TimeService.DeltaTime);
+			return Vector3.Lerp(TransformProvider.Position, targetPosition, Smoothing.Value * TimeService.DeltaTime);
 		}
 
 		private Vector3 GetMatchPosition() => new Vector3(Target.Position.x, Target.Position.y, TransformProvider.Position.z);

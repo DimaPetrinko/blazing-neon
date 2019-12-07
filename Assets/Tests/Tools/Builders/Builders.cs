@@ -241,13 +241,19 @@ namespace Tests.Tools.Builders
 
 	public sealed class CameraFollowBuilder : InterfacedBuilder<CameraFollow, ICameraFollow>
 	{
-		private float smoothing;
+		private FloatReference smoothing;
 		private ITransformProvider target;
 		private ITransformProvider transformProvider;
 
-		public CameraFollowBuilder WithSmoothing(float smoothing)
+		public CameraFollowBuilder WithSmoothing(FloatReference smoothing)
 		{
 			this.smoothing = smoothing;
+			return this;
+		}
+
+		public CameraFollowBuilder WithSmoothing(float smoothing)
+		{
+			this.smoothing = new FloatReference(smoothing);
 			return this;
 		}
 
