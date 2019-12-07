@@ -1,21 +1,28 @@
 using UnityEngine;
 
-namespace Game.TDD.GameSystemServices
+namespace Game.GameSystemServices
 {
-	public abstract class BaseComponent<T> : MonoBehaviour where T : class
+	public abstract class BaseComponent<T> : BaseComponent where T : class
 	{
 		[Header("Base component")]
-		[SerializeField] private bool createInstanceOnAwake = true;
+		[SerializeField] private bool _createInstanceOnAwake = true;
 
-		private T instance;
+		private T _instance;
 
-		public T Instance => instance ?? (instance = CreateInstance());
+		public T Instance => _instance ?? (_instance = CreateInstance());
+
+		public override object BaseInstance => Instance;
 
 		private void Awake()
 		{
-			if (createInstanceOnAwake) instance = CreateInstance();
+			if (_createInstanceOnAwake) _instance = CreateInstance();
 		}
 
 		protected abstract T CreateInstance();
+	}
+
+	public abstract class BaseComponent : MonoBehaviour
+	{
+		public abstract object BaseInstance { get; }
 	}
 }

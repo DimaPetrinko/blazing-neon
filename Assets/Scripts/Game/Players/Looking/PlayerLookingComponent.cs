@@ -1,13 +1,14 @@
-using Game.TDD.GameSystemServices;
+using Game.GameSystemServices;
 using UnityEngine;
 
-namespace Game.TDD.Players.Looking
+namespace Game.Players.Looking
 {
 	public sealed class PlayerLookingComponent : BaseComponent<ILookingBehaviour>
 	{
-		[SerializeField] private Camera cam;
+		[Header("Player looking component")]
+		[SerializeField] private Camera _cam;
 
 		protected override ILookingBehaviour CreateInstance() =>
-			new PlayerLooking(transform, new UnityWorldToScreenProvider(cam));
+			new PlayerLooking(transform, new UnityWorldToScreenProvider(_cam));
 	}
 }

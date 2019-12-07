@@ -3,7 +3,7 @@ using Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace Game.TDD.Players.Input
+namespace Game.Players.Input
 {
 	public interface IInputBehaviour
 	{
@@ -19,7 +19,7 @@ namespace Game.TDD.Players.Input
 
 	public sealed class PlayerInput : IInputBehaviour
 	{
-		private readonly InputMaster controls;
+		private readonly InputMaster _controls;
 
 		public event EventHandler<Vector2EventArgs> Dash;
 		public Vector2 MovementDirection { get; private set; }
@@ -28,20 +28,20 @@ namespace Game.TDD.Players.Input
 
 		public PlayerInput(InputMaster inputMaster = null)
 		{
-			controls = inputMaster ?? new InputMaster();
+			_controls = inputMaster ?? new InputMaster();
 			Init();
 		}
 
 		private void Init()
 		{
-			controls.Player.Movement.performed += MovementPerformed;
-			controls.Player.Dash.performed += DashPerformed;
-			controls.Player.Looking.performed += LookingPerformed;
+			_controls.Player.Movement.performed += MovementPerformed;
+			_controls.Player.Dash.performed += DashPerformed;
+			_controls.Player.Looking.performed += LookingPerformed;
 		}
 
-		public void OnEnable() => controls.Enable();
+		public void OnEnable() => _controls.Enable();
 
-		public void OnDisable() => controls.Disable();
+		public void OnDisable() => _controls.Disable();
 
 		private void MovementPerformed(InputAction.CallbackContext context) =>
 			MovementDirection = context.ReadValue<Vector2>();

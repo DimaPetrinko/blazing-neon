@@ -1,21 +1,19 @@
 using System;
 using System.Collections.Generic;
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.TransformProviders;
-using Game.TDD.Players.Dashing;
-using Game.TDD.Players.Input;
+using Game.GameSystemServices;
+using Game.GameSystemServices.TransformProviders;
+using Game.Players.Dashing;
+using Game.Players.Input;
+using Game.Players.Looking;
+using Game.Players.Movement;
 using UnityEngine;
-using DeviceType = Game.TDD.Players.Input.DeviceType;
-using ILookingBehaviour = Game.TDD.Players.Looking.ILookingBehaviour;
-using IMovementBehaviour = Game.TDD.Players.Movement.IMovementBehaviour;
-using PlayerLooking = Game.TDD.Players.Looking.PlayerLooking;
-using PlayerMovement = Game.TDD.Players.Movement.PlayerMovement;
+using DeviceType = Game.Players.Input.DeviceType;
 
-namespace Game.TDD.Players
+namespace Game.Players
 {
 	public sealed class Player : ISceneObject
 	{
-		private Dictionary<DeviceType, Action<Vector2>> performLookingActions;
+		private Dictionary<DeviceType, Action<Vector2>> _performLookingActions;
 
 		public IInputBehaviour InputBehaviour { get; }
 		public IMovementBehaviour MovementBehaviour { get; }
@@ -38,13 +36,13 @@ namespace Game.TDD.Players
 			}
 			else TransformProvider = transformProvider;
 
-
 			if (movementBehaviour != null)
 			{
 				MovementBehaviour = movementBehaviour;
 				MovementBehaviour.TransformProvider = TransformProvider;
 			}
 			else MovementBehaviour = new PlayerMovement(TransformProvider);
+
 			if (dashingBehaviour != null)
 			{
 				DashingBehaviour = dashingBehaviour;
@@ -75,7 +73,7 @@ namespace Game.TDD.Players
 		{
 			InputBehaviour.Dash += DashEventHandler;
 
-			performLookingActions = new Dictionary<DeviceType, Action<Vector2>>
+			_performLookingActions = new Dictionary<DeviceType, Action<Vector2>>
 			{
 				{DeviceType.Mouse, LookingBehaviour.PerformLookingAtPosition},
 				{DeviceType.Gamepad, LookingBehaviour.PerformLookingInDirection}
@@ -88,10 +86,10 @@ namespace Game.TDD.Players
 		{
 			if (!DashingBehaviour.IsDashing) MovementBehaviour.PerformMovement(InputBehaviour.MovementDirection);
 
-			if (performLookingActions.ContainsKey(InputBehaviour.LookDeviceType))
-				performLookingActions[InputBehaviour.LookDeviceType].Invoke(InputBehaviour.LookDirection);
+			if (_performLookingActions.ContainsKey(InputBehaviour.LookDeviceType))
+				_performLookingActions[InputBehaviour.LookDeviceType].Invoke(InputBehaviour.LookDirection);
 		}
-		
+
 		public void OnDestroy() => InputBehaviour.Dash -= DashEventHandler;
 	}
 }

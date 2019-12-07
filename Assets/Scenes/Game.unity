@@ -121,6 +121,18 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &333331479 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 888930019215952719, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+    type: 3}
+  m_PrefabInstance: {fileID: 6787032752032754921}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75706e0a57cc4a42bacb9de3777b617d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -132,6 +144,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -147,6 +160,22 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b08ad326ca2a4ec8b36d970f9f139add, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _createInstanceOnAwake: 1
+  _target: {fileID: 333331479}
+  _smoothing:
+    _value: 20
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -276,6 +305,11 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 4993029635361626523, guid: 8f9f9434dbc4b5a4f9d2bd1d108ee357,
+        type: 3}
+      propertyPath: _cam
+      value: 
+      objectReference: {fileID: 519420031}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f9f9434dbc4b5a4f9d2bd1d108ee357, type: 3}
 --- !u!1001 &6787032752032754921
@@ -288,6 +322,11 @@ PrefabInstance:
     - target: {fileID: 1179294869672044247, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}
       propertyPath: cam
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 1179294869672044247, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: _cam
       value: 
       objectReference: {fileID: 519420031}
     - target: {fileID: 6787032753006636104, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,

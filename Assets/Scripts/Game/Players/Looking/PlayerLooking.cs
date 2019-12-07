@@ -1,8 +1,7 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.TransformProviders;
+using Game.GameSystemServices.TransformProviders;
 using UnityEngine;
 
-namespace Game.TDD.Players.Looking
+namespace Game.Players.Looking
 {
 	public interface ILookingBehaviour
 	{
@@ -23,8 +22,8 @@ namespace Game.TDD.Players.Looking
 			ITransformProvider transformProvider = null)
 		{
 			WorldToScreenProvider = worldToScreenProvider ?? new UnityWorldToScreenProvider(Camera.main);
-			TransformProvider = transformProvider ?? new UnityTransformProvider(
-				new GameObject("PlayerLooking").transform);
+			TransformProvider =
+				transformProvider ?? new UnityTransformProvider(new GameObject("PlayerLooking").transform);
 		}
 
 		public PlayerLooking(Transform transform, IWorldToScreenProvider worldToScreenProvider = null) : this(

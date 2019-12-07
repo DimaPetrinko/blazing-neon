@@ -1,8 +1,8 @@
-using Game.TDD.GameSystemServices;
-using Game.TDD.GameSystemServices.TransformProviders;
+using Game.GameSystemServices;
+using Game.GameSystemServices.TransformProviders;
 using UnityEngine;
 
-namespace Game.TDD.Players.Movement
+namespace Game.Players.Movement
 {
 	public interface IMovementBehaviour
 	{
@@ -26,8 +26,8 @@ namespace Game.TDD.Players.Movement
 		{
 			Speed = speed > 0 ? speed : DEFAULT_SPEED;
 			TimeService = timeService ?? new UnityTimeService();
-			TransformProvider = transformProvider ??
-				new UnityTransformProvider(new GameObject("PlayerMovement").transform);
+			TransformProvider =
+				transformProvider ?? new UnityTransformProvider(new GameObject("PlayerMovement").transform);
 		}
 
 		public PlayerMovement(float speed, Transform transform) : this(speed, null,

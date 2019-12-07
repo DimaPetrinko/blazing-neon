@@ -1,4 +1,4 @@
-namespace Game.TDD.GameSystemServices
+namespace Game.GameSystemServices
 {
 	public interface ITimeService
 	{

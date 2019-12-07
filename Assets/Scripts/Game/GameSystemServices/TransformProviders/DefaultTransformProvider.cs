@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.TDD.GameSystemServices.TransformProviders
+namespace Game.GameSystemServices.TransformProviders
 {
 	public sealed class DefaultTransformProvider : ITransformProvider
 	{
@@ -8,7 +8,7 @@ namespace Game.TDD.GameSystemServices.TransformProviders
 		public Vector3 Position { get; set; }
 		public Quaternion Rotation { get; set; }
 		public Vector3 LocalScale { get; set; }
-		public void Translate(Vector2 byVector, Space space = Space.Self) => Position += (Vector3)byVector;
+		public void Translate(Vector3 byVector, Space space = Space.Self) => Position += byVector;
 
 		public void Rotate(Vector3 axis, float angle, Space space = Space.Self) =>
 			Rotation *= Quaternion.AngleAxis(angle, axis);

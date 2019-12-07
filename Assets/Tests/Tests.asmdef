@@ -1,9 +1,10 @@
 {
-    "name": "TDDPlayerTests",
+    "name": "Tests",
     "references": [
         "neon-blaze",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "TestTools"
     ],
     "includePlatforms": [
         "Editor"

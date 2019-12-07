@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using ThreadPriority = System.Threading.ThreadPriority;
 
-namespace Game.TDD.GameSystemServices.CoroutineRunners
+namespace Game.GameSystemServices.CoroutineRunners
 {
 	public sealed class AsyncCoroutineRunner : ICoroutineRunner
 	{
@@ -21,9 +21,8 @@ namespace Game.TDD.GameSystemServices.CoroutineRunners
 		{
 			Thread.CurrentThread.Priority = ThreadPriority.Highest;
 			while (routine.MoveNext())
-			{
-				if (routine.Current is WaitForSeconds) Thread.Sleep(500);
-			}
+				if (routine.Current is WaitForSeconds)
+					Thread.Sleep(500);
 		}
 	}
 }
