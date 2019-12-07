@@ -9,10 +9,8 @@ namespace Game.Players.Looking
 
 	public sealed class UnityWorldToScreenProvider : IWorldToScreenProvider
 	{
-		private readonly Camera camera;
-
-		public UnityWorldToScreenProvider(Camera camera) => this.camera = camera;
-
-		public Vector2 Get(Vector2 worldPosition) => camera.WorldToScreenPoint(worldPosition);
+		private readonly Camera _camera;
+		public UnityWorldToScreenProvider(Camera camera) => _camera = camera;
+		public Vector2 Get(Vector2 worldPosition) => _camera.WorldToScreenPoint(worldPosition);
 	}
 }

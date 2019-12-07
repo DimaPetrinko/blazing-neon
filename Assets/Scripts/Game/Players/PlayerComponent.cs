@@ -10,14 +10,14 @@ namespace Game.Players
 	public sealed class PlayerComponent : BaseComponent<Player>
 	{
 		[Header("Player component")]
-		[SerializeField] private PlayerInputComponent inputBehaviourComponent;
-		[SerializeField] private PlayerMovementComponent movementBehaviourComponent;
-		[SerializeField] private PlayerDashingComponent dashingBehaviourComponent;
-		[SerializeField] private PlayerLookingComponent lookingBehaviourComponent;
+		[SerializeField] private PlayerInputComponent _inputBehaviourComponent;
+		[SerializeField] private PlayerMovementComponent _movementBehaviourComponent;
+		[SerializeField] private PlayerDashingComponent _dashingBehaviourComponent;
+		[SerializeField] private PlayerLookingComponent _lookingBehaviourComponent;
 
-		protected override Player CreateInstance() => new Player(transform, inputBehaviourComponent.Instance,
-			movementBehaviourComponent.Instance, dashingBehaviourComponent.Instance,
-			lookingBehaviourComponent.Instance);
+		protected override Player CreateInstance() => new Player(transform, _inputBehaviourComponent.Instance,
+			_movementBehaviourComponent.Instance, _dashingBehaviourComponent.Instance,
+			_lookingBehaviourComponent.Instance);
 
 		private void FixedUpdate() => Instance.FixedUpdate();
 

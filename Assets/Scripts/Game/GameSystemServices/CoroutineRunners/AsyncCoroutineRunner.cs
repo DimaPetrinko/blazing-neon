@@ -21,9 +21,8 @@ namespace Game.GameSystemServices.CoroutineRunners
 		{
 			Thread.CurrentThread.Priority = ThreadPriority.Highest;
 			while (routine.MoveNext())
-			{
-				if (routine.Current is WaitForSeconds) Thread.Sleep(500);
-			}
+				if (routine.Current is WaitForSeconds)
+					Thread.Sleep(500);
 		}
 	}
 }

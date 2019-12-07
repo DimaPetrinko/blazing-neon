@@ -1,4 +1,3 @@
-using Game;
 using Game.CameraSystem;
 using Game.GameSystemServices;
 using Game.GameSystemServices.CoroutineRunners;
@@ -31,159 +30,159 @@ namespace Tests.Tools.Builders
 		public static implicit operator T(Builder<T> builder) => builder.Build();
 	}
 	
-	public abstract class InterfacedBuilder<T, I> where T : class, I
+	public abstract class InterfacedBuilder<TClass, TInterface> where TClass : class, TInterface
 	{
-		public I Interface => (I)Build();
-		protected abstract T Build();
-		public static implicit operator T(InterfacedBuilder<T, I> builder) => builder.Build();
+		public TInterface Interface => (TInterface)Build();
+		protected abstract TClass Build();
+		public static implicit operator TClass(InterfacedBuilder<TClass, TInterface> builder) => builder.Build();
 	}
 
 	public sealed class PlayerMovementBuilder : InterfacedBuilder<PlayerMovement, IMovementBehaviour>
 	{
-		private float speed = -1;
-		private ITimeService timeService;
-		private ITransformProvider transformProvider;
+		private float _speed = -1;
+		private ITimeService _timeService;
+		private ITransformProvider _transformProvider;
 
 		public PlayerMovementBuilder WithSpeed(float speed)
 		{
-			this.speed = speed;
+			_speed = speed;
 			return this;
 		}
 		
 		public PlayerMovementBuilder With(ITimeService timeService)
 		{
-			this.timeService = timeService;
+			_timeService = timeService;
 			return this;
 		}
 		
 		public PlayerMovementBuilder With(ITransformProvider transformProvider)
 		{
-			this.transformProvider = transformProvider;
+			_transformProvider = transformProvider;
 			return this;
 		}
 		
 		public PlayerMovementBuilder With(Transform transform)
 		{
-			transformProvider = new UnityTransformProvider(transform);
+			_transformProvider = new UnityTransformProvider(transform);
 			return this;
 		}
 
-		protected override PlayerMovement Build() => new PlayerMovement(speed, timeService, transformProvider);
+		protected override PlayerMovement Build() => new PlayerMovement(_speed, _timeService, _transformProvider);
 	}
 
 	public sealed class PlayerLookingBuilder : InterfacedBuilder<PlayerLooking, ILookingBehaviour>
 	{
-		public IWorldToScreenProvider worldToScreenProvider;
-		private ITransformProvider transformProvider;
+		public IWorldToScreenProvider _worldToScreenProvider;
+		private ITransformProvider _transformProvider;
 		
 		public PlayerLookingBuilder With(IWorldToScreenProvider worldToScreenProvider)
 		{
-			this.worldToScreenProvider = worldToScreenProvider;
+			_worldToScreenProvider = worldToScreenProvider;
 			return this;
 		}
 		
 		public PlayerLookingBuilder With(ITransformProvider transformProvider)
 		{
-			this.transformProvider = transformProvider;
+			_transformProvider = transformProvider;
 			return this;
 		}
 		
 		public PlayerLookingBuilder With(Transform transform)
 		{
-			transformProvider = new UnityTransformProvider(transform);
+			_transformProvider = new UnityTransformProvider(transform);
 			return this;
 		}
 
-		protected override PlayerLooking Build() => new PlayerLooking(worldToScreenProvider, transformProvider);
+		protected override PlayerLooking Build() => new PlayerLooking(_worldToScreenProvider, _transformProvider);
 	}
 
 	public sealed class PlayerDashingBuilder : InterfacedBuilder<PlayerDashing, IDashingBehaviour>
 	{
-		private float distance = -1;
-		private float speed = -1;
-		private int cooldown = -1;
-		private AnimationCurve dashSpeedCurve;
-		private ITimeService timeService;
-		private ICoroutineRunner coroutineRunner;
-		private ITransformProvider transformProvider;
+		private float _distance = -1;
+		private float _speed = -1;
+		private int _cooldown = -1;
+		private AnimationCurve _dashSpeedCurve;
+		private ITimeService _timeService;
+		private ICoroutineRunner _coroutineRunner;
+		private ITransformProvider _transformProvider;
 
 		public PlayerDashingBuilder WithDistance(float distance)
 		{
-			this.distance = distance;
+			_distance = distance;
 			return this;
 		}
 		
 		public PlayerDashingBuilder WithSpeed(float speed)
 		{
-			this.speed = speed;
+			_speed = speed;
 			return this;
 		}
 
 		public PlayerDashingBuilder WithCooldown(int cooldown)
 		{
-			this.cooldown = cooldown;
+			_cooldown = cooldown;
 			return this;
 		}
 		
 		public PlayerDashingBuilder WithCurve(AnimationCurve dashSpeedCurve)
 		{
-			this.dashSpeedCurve = dashSpeedCurve;
+			_dashSpeedCurve = dashSpeedCurve;
 			return this;
 		}
 		
 		public PlayerDashingBuilder With(ITimeService timeService)
 		{
-			this.timeService = timeService;
+			_timeService = timeService;
 			return this;
 		}
 		
 		public PlayerDashingBuilder With(ICoroutineRunner coroutineRunner)
 		{
-			this.coroutineRunner = coroutineRunner;
+			_coroutineRunner = coroutineRunner;
 			return this;
 		}
 		
 		public PlayerDashingBuilder With(ITransformProvider transformProvider)
 		{
-			this.transformProvider = transformProvider;
+			_transformProvider = transformProvider;
 			return this;
 		}
 		
 		public PlayerDashingBuilder With(Transform transform)
 		{
-			transformProvider = new UnityTransformProvider(transform);
+			_transformProvider = new UnityTransformProvider(transform);
 			return this;
 		}
 
-		protected override PlayerDashing Build() => new PlayerDashing(distance, speed, cooldown, dashSpeedCurve,
-			timeService, coroutineRunner, transformProvider);
+		protected override PlayerDashing Build() => new PlayerDashing(_distance, _speed, _cooldown, _dashSpeedCurve,
+			_timeService, _coroutineRunner, _transformProvider);
 	}
 
 	public sealed class PlayerInputBuilder : InterfacedBuilder<PlayerInput, IInputBehaviour>
 	{
-		private InputMaster inputMaster;
+		private InputMaster _inputMaster;
 		
 		public PlayerInputBuilder With(InputMaster inputMaster)
 		{
-			this.inputMaster = inputMaster;
+			_inputMaster = inputMaster;
 			return this;
 		}
 
-		protected override PlayerInput Build() => new PlayerInput(inputMaster);
+		protected override PlayerInput Build() => new PlayerInput(_inputMaster);
 	}
 
 	public sealed class UnityTransformProviderBuilder : InterfacedBuilder<UnityTransformProvider, ITransformProvider>
 	{
-		private Transform transform;
+		private Transform _transform;
 
 		public UnityTransformProviderBuilder With(Transform transform)
 		{
-			this.transform = transform;
+			_transform = transform;
 			return this;
 		}
 
 		protected override UnityTransformProvider Build() =>
-			new UnityTransformProvider(transform ? transform : new GameObject().transform);
+			new UnityTransformProvider(_transform ? _transform : new GameObject().transform);
 	}
 	
 	public sealed class UnityTimeServiceBuilder : InterfacedBuilder<UnityTimeService, ITimeService>
@@ -193,94 +192,94 @@ namespace Tests.Tools.Builders
 
 	public sealed class PlayerBuilder : Builder<Player>
 	{
-		private IInputBehaviour inputBehaviour;
-		private IMovementBehaviour movementBehaviour;
-		private IDashingBehaviour dashingBehaviour;
-		private ILookingBehaviour lookingBehaviour;
-		private ITransformProvider transformProvider;
+		private IInputBehaviour _inputBehaviour;
+		private IMovementBehaviour _movementBehaviour;
+		private IDashingBehaviour _dashingBehaviour;
+		private ILookingBehaviour _lookingBehaviour;
+		private ITransformProvider _transformProvider;
 
 		public PlayerBuilder With(IInputBehaviour inputBehaviour)
 		{
-			this.inputBehaviour = inputBehaviour;
+			_inputBehaviour = inputBehaviour;
 			return this;
 		}
 		
 		public PlayerBuilder With(IMovementBehaviour movementBehaviour)
 		{
-			this.movementBehaviour = movementBehaviour;
+			_movementBehaviour = movementBehaviour;
 			return this;
 		}
 		
 		public PlayerBuilder With(IDashingBehaviour dashingBehaviour)
 		{
-			this.dashingBehaviour = dashingBehaviour;
+			_dashingBehaviour = dashingBehaviour;
 			return this;
 		}
 		
 		public PlayerBuilder With(ILookingBehaviour lookingBehaviour)
 		{
-			this.lookingBehaviour = lookingBehaviour;
+			_lookingBehaviour = lookingBehaviour;
 			return this;
 		}
 		
 		public PlayerBuilder With(ITransformProvider transformProvider)
 		{
-			this.transformProvider = transformProvider;
+			_transformProvider = transformProvider;
 			return this;
 		}
 		
 		public PlayerBuilder With(Transform transform)
 		{
-			transformProvider = new UnityTransformProvider(transform);
+			_transformProvider = new UnityTransformProvider(transform);
 			return this;
 		}
 
-		protected override Player Build() => new Player(transformProvider, inputBehaviour, movementBehaviour,
-			dashingBehaviour, lookingBehaviour);
+		protected override Player Build() => new Player(_transformProvider, _inputBehaviour, _movementBehaviour,
+			_dashingBehaviour, _lookingBehaviour);
 	}
 
 	public sealed class CameraFollowBuilder : InterfacedBuilder<CameraFollow, ICameraFollow>
 	{
-		private FloatReference smoothing;
-		private ITransformProvider target;
-		private ITransformProvider transformProvider;
+		private FloatReference _smoothing;
+		private ITransformProvider _target;
+		private ITransformProvider _transformProvider;
 
 		public CameraFollowBuilder WithSmoothing(FloatReference smoothing)
 		{
-			this.smoothing = smoothing;
+			_smoothing = smoothing;
 			return this;
 		}
 
 		public CameraFollowBuilder WithSmoothing(float smoothing)
 		{
-			this.smoothing = new FloatReference(smoothing);
+			_smoothing = new FloatReference(smoothing);
 			return this;
 		}
 
 		public CameraFollowBuilder WithTarget(ISceneObject target)
 		{
-			this.target = target.TransformProvider;
+			_target = target.TransformProvider;
 			return this;
 		}
 
 		public CameraFollowBuilder WithTarget(ITransformProvider target)
 		{
-			this.target = target;
+			_target = target;
 			return this;
 		}
 
 		public CameraFollowBuilder With(ITransformProvider transformProvider)
 		{
-			this.transformProvider = transformProvider;
+			_transformProvider = transformProvider;
 			return this;
 		}
 
 		public CameraFollowBuilder With(Transform transform)
 		{
-			transformProvider = A.UnityTransformProvider.With(transform).Interface;
+			_transformProvider = A.UnityTransformProvider.With(transform).Interface;
 			return this;
 		}
 
-		protected override CameraFollow Build() => new CameraFollow(smoothing, transformProvider, target);
+		protected override CameraFollow Build() => new CameraFollow(_smoothing, _transformProvider, _target);
 	}
 }

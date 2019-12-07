@@ -25,7 +25,7 @@ namespace Game.Players.Dashing
 		public const float DEFAULT_COOLDOWN = 0;
 
 		private float Duration => Distance / Speed;
-		private bool canDash = true;
+		private bool _canDash = true;
 
 		public float Distance { get; }
 		public float Speed { get; }
@@ -48,13 +48,13 @@ namespace Game.Players.Dashing
 			MovementCurve = movementCurve ?? AnimationCurve.Linear(0, 0, 1, 1);
 			TimeService = timeService ?? new UnityTimeService();
 			CoroutineRunner = coroutineRunner ?? new DefaultCoroutineRunner();
-			TransformProvider = transformProvider ??
-				new UnityTransformProvider(new GameObject("PlayerMovement").transform);
+			TransformProvider =
+				transformProvider ?? new UnityTransformProvider(new GameObject("PlayerMovement").transform);
 		}
 
 		public PlayerDashing(float distance, float speed, float cooldown, AnimationCurve movementCurve,
-			ICoroutineRunner coroutineRunner, Transform transform) : this(distance, speed, cooldown,
-			movementCurve, null, coroutineRunner, new UnityTransformProvider(transform)) {}
+			ICoroutineRunner coroutineRunner, Transform transform) : this(distance, speed, cooldown, movementCurve,
+			null, coroutineRunner, new UnityTransformProvider(transform)) {}
 
 		public PlayerDashing(ITimeService timeService) : this(DEFAULT_DISTANCE, DEFAULT_SPEED, DEFAULT_COOLDOWN, null,
 			timeService) {}
@@ -70,8 +70,8 @@ namespace Game.Players.Dashing
 
 		private IEnumerator Dash(Vector2 movementDirection)
 		{
-			if (!canDash) yield break;
-			canDash = false;
+			if (!_canDash) yield break;
+			_canDash = false;
 			IsDashing = true;
 			movementDirection.Normalize();
 			var startingDashDirection = movementDirection;
@@ -90,7 +90,7 @@ namespace Game.Players.Dashing
 
 			IsDashing = false;
 			if (Cooldown > 0) yield return new WaitForSeconds(Cooldown);
-			canDash = true;
+			_canDash = true;
 		}
 
 		private void PerformDashMovement(Vector2 movementDirection)

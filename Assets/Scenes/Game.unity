@@ -172,11 +172,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b08ad326ca2a4ec8b36d970f9f139add, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 1
-  _target:
-    value: {fileID: 333331479}
+  _createInstanceOnAwake: 1
+  _target: {fileID: 333331479}
   _smoothing:
-    value: 20
+    _value: 20
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -306,6 +305,11 @@ PrefabInstance:
       propertyPath: cam
       value: 
       objectReference: {fileID: 519420031}
+    - target: {fileID: 4993029635361626523, guid: 8f9f9434dbc4b5a4f9d2bd1d108ee357,
+        type: 3}
+      propertyPath: _cam
+      value: 
+      objectReference: {fileID: 519420031}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f9f9434dbc4b5a4f9d2bd1d108ee357, type: 3}
 --- !u!1001 &6787032752032754921
@@ -318,6 +322,11 @@ PrefabInstance:
     - target: {fileID: 1179294869672044247, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
         type: 3}
       propertyPath: cam
+      value: 
+      objectReference: {fileID: 519420031}
+    - target: {fileID: 1179294869672044247, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,
+        type: 3}
+      propertyPath: _cam
       value: 
       objectReference: {fileID: 519420031}
     - target: {fileID: 6787032753006636104, guid: ea2bc035a68cb3c49bd0b9c3ea9e9b83,

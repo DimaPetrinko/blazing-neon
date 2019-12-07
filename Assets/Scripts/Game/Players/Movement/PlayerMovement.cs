@@ -26,8 +26,8 @@ namespace Game.Players.Movement
 		{
 			Speed = speed > 0 ? speed : DEFAULT_SPEED;
 			TimeService = timeService ?? new UnityTimeService();
-			TransformProvider = transformProvider ??
-				new UnityTransformProvider(new GameObject("PlayerMovement").transform);
+			TransformProvider =
+				transformProvider ?? new UnityTransformProvider(new GameObject("PlayerMovement").transform);
 		}
 
 		public PlayerMovement(float speed, Transform transform) : this(speed, null,

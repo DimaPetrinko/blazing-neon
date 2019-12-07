@@ -59,7 +59,7 @@ namespace Tests.CameraFollow
 			var originalTargetPosition = target.Position;
 
 			var targetPosition = Vector3.right;
-			var targetDirection = (targetPosition - originalTargetPosition).normalized; 
+			var targetDirection = (targetPosition - originalTargetPosition).normalized;
 			target.Translate(targetPosition);
 			cameraFollow.Update();
 			var followDirection = (cameraFollow.TransformProvider.Position - originalPosition).normalized;
@@ -100,7 +100,6 @@ namespace Tests.CameraFollow
 		[Test]
 		public void ClearTarget_causes_to_stop_moving_next_update()
 		{
-			
 			ITransformProvider target = new DefaultTransformProvider();
 			target.Position = new Vector3(5, 8);
 			var cameraFollow = A.CameraFollow.WithTarget(target).Interface;

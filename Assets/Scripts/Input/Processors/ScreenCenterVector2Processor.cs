@@ -21,7 +21,7 @@ namespace Input.Processors
 
 		public override Vector2 Process(Vector2 value, InputControl control)
 		{
-			return new Vector2(value.x - Screen.width/2, value.y - Screen.height/2);
+			return new Vector2(value.x - Screen.width / 2f, value.y - Screen.height / 2f);
 		}
 	}
 }

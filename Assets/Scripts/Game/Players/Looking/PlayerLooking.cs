@@ -22,8 +22,8 @@ namespace Game.Players.Looking
 			ITransformProvider transformProvider = null)
 		{
 			WorldToScreenProvider = worldToScreenProvider ?? new UnityWorldToScreenProvider(Camera.main);
-			TransformProvider = transformProvider ?? new UnityTransformProvider(
-				new GameObject("PlayerLooking").transform);
+			TransformProvider =
+				transformProvider ?? new UnityTransformProvider(new GameObject("PlayerLooking").transform);
 		}
 
 		public PlayerLooking(Transform transform, IWorldToScreenProvider worldToScreenProvider = null) : this(

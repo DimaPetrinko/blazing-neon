@@ -3,31 +3,33 @@ using UnityEngine;
 
 namespace Game.GameSystemServices
 {
+	[Serializable]
 	public abstract class BaseDataReference<T>
 	{
-		[SerializeField] protected T value;
+		[SerializeField] protected T _value;
 	}
 
 	public abstract class DataReference<T> : BaseDataReference<T>
 	{
 		public event EventHandler ValueChanged;
+
 		public T Value
 		{
-			get => value;
+			get => _value;
 			set
 			{
-				this.value = value;
+				_value = value;
 				ValueChanged?.Invoke(this, EventArgs.Empty);
 			}
 		}
 
-		protected DataReference(T defaultValue) => value = defaultValue;
+		protected DataReference(T defaultValue) => _value = defaultValue;
 	}
-	
+
 	public abstract class ReadonlyDataReference<T> : BaseDataReference<T>
 	{
-		public T Value => value;
-		protected ReadonlyDataReference(T defaultValue) => value = defaultValue;
+		public T Value => _value;
+		protected ReadonlyDataReference(T defaultValue) => _value = defaultValue;
 	}
 
 	[Serializable]
@@ -41,7 +43,7 @@ namespace Game.GameSystemServices
 	{
 		public ReadonlyFloatReference(float defaultValue) : base(defaultValue) {}
 	}
-	
+
 	[Serializable]
 	public sealed class ComponentReference : ReadonlyDataReference<BaseComponent>
 	{
