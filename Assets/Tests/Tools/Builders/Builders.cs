@@ -29,7 +29,7 @@ namespace Tests.Tools.Builders
 		protected abstract T Build();
 		public static implicit operator T(Builder<T> builder) => builder.Build();
 	}
-	
+
 	public abstract class InterfacedBuilder<TClass, TInterface> where TClass : class, TInterface
 	{
 		public TInterface Interface => (TInterface)Build();
@@ -48,19 +48,19 @@ namespace Tests.Tools.Builders
 			_speed = speed;
 			return this;
 		}
-		
+
 		public PlayerMovementBuilder With(ITimeService timeService)
 		{
 			_timeService = timeService;
 			return this;
 		}
-		
+
 		public PlayerMovementBuilder With(ITransformProvider transformProvider)
 		{
 			_transformProvider = transformProvider;
 			return this;
 		}
-		
+
 		public PlayerMovementBuilder With(Transform transform)
 		{
 			_transformProvider = new UnityTransformProvider(transform);
@@ -74,19 +74,19 @@ namespace Tests.Tools.Builders
 	{
 		public IWorldToScreenProvider _worldToScreenProvider;
 		private ITransformProvider _transformProvider;
-		
+
 		public PlayerLookingBuilder With(IWorldToScreenProvider worldToScreenProvider)
 		{
 			_worldToScreenProvider = worldToScreenProvider;
 			return this;
 		}
-		
+
 		public PlayerLookingBuilder With(ITransformProvider transformProvider)
 		{
 			_transformProvider = transformProvider;
 			return this;
 		}
-		
+
 		public PlayerLookingBuilder With(Transform transform)
 		{
 			_transformProvider = new UnityTransformProvider(transform);
@@ -111,7 +111,7 @@ namespace Tests.Tools.Builders
 			_distance = distance;
 			return this;
 		}
-		
+
 		public PlayerDashingBuilder WithSpeed(float speed)
 		{
 			_speed = speed;
@@ -123,31 +123,31 @@ namespace Tests.Tools.Builders
 			_cooldown = cooldown;
 			return this;
 		}
-		
+
 		public PlayerDashingBuilder WithCurve(AnimationCurve dashSpeedCurve)
 		{
 			_dashSpeedCurve = dashSpeedCurve;
 			return this;
 		}
-		
+
 		public PlayerDashingBuilder With(ITimeService timeService)
 		{
 			_timeService = timeService;
 			return this;
 		}
-		
+
 		public PlayerDashingBuilder With(ICoroutineRunner coroutineRunner)
 		{
 			_coroutineRunner = coroutineRunner;
 			return this;
 		}
-		
+
 		public PlayerDashingBuilder With(ITransformProvider transformProvider)
 		{
 			_transformProvider = transformProvider;
 			return this;
 		}
-		
+
 		public PlayerDashingBuilder With(Transform transform)
 		{
 			_transformProvider = new UnityTransformProvider(transform);
@@ -161,7 +161,7 @@ namespace Tests.Tools.Builders
 	public sealed class PlayerInputBuilder : InterfacedBuilder<PlayerInput, IInputBehaviour>
 	{
 		private InputMaster _inputMaster;
-		
+
 		public PlayerInputBuilder With(InputMaster inputMaster)
 		{
 			_inputMaster = inputMaster;
@@ -184,7 +184,7 @@ namespace Tests.Tools.Builders
 		protected override UnityTransformProvider Build() =>
 			new UnityTransformProvider(_transform ? _transform : new GameObject().transform);
 	}
-	
+
 	public sealed class UnityTimeServiceBuilder : InterfacedBuilder<UnityTimeService, ITimeService>
 	{
 		protected override UnityTimeService Build() => new UnityTimeService();
@@ -203,31 +203,31 @@ namespace Tests.Tools.Builders
 			_inputBehaviour = inputBehaviour;
 			return this;
 		}
-		
+
 		public PlayerBuilder With(IMovementBehaviour movementBehaviour)
 		{
 			_movementBehaviour = movementBehaviour;
 			return this;
 		}
-		
+
 		public PlayerBuilder With(IDashingBehaviour dashingBehaviour)
 		{
 			_dashingBehaviour = dashingBehaviour;
 			return this;
 		}
-		
+
 		public PlayerBuilder With(ILookingBehaviour lookingBehaviour)
 		{
 			_lookingBehaviour = lookingBehaviour;
 			return this;
 		}
-		
+
 		public PlayerBuilder With(ITransformProvider transformProvider)
 		{
 			_transformProvider = transformProvider;
 			return this;
 		}
-		
+
 		public PlayerBuilder With(Transform transform)
 		{
 			_transformProvider = new UnityTransformProvider(transform);
