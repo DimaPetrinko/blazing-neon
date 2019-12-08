@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Game.GameSystemServices
+namespace Game.GameSystemServices.DataReferences
 {
 	[Serializable]
 	public abstract class BaseDataReference<T>
@@ -24,29 +24,12 @@ namespace Game.GameSystemServices
 		}
 
 		protected DataReference(T defaultValue) => _value = defaultValue;
+		protected DataReference() {}
 	}
 
 	public abstract class ReadonlyDataReference<T> : BaseDataReference<T>
 	{
 		public T Value => _value;
 		protected ReadonlyDataReference(T defaultValue) => _value = defaultValue;
-	}
-
-	[Serializable]
-	public sealed class FloatReference : DataReference<float>
-	{
-		public FloatReference(float defaultValue) : base(defaultValue) {}
-	}
-
-	[Serializable]
-	public sealed class ReadonlyFloatReference : ReadonlyDataReference<float>
-	{
-		public ReadonlyFloatReference(float defaultValue) : base(defaultValue) {}
-	}
-
-	[Serializable]
-	public sealed class ComponentReference : ReadonlyDataReference<BaseComponent>
-	{
-		public ComponentReference(BaseComponent defaultValue) : base(defaultValue) {}
 	}
 }

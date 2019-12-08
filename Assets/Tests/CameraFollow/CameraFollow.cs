@@ -20,7 +20,7 @@ namespace Tests.CameraFollow
 		{
 			var cameraFollow = A.CameraFollow.Interface;
 
-			Assert.IsNull(cameraFollow.Target);
+			Assert.IsNull(cameraFollow.Target.Value);
 		}
 
 		[Test]

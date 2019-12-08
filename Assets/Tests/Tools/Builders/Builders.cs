@@ -1,6 +1,7 @@
 using Game.CameraSystem;
 using Game.GameSystemServices;
 using Game.GameSystemServices.CoroutineRunners;
+using Game.GameSystemServices.DataReferences;
 using Game.GameSystemServices.TransformProviders;
 using Game.Players;
 using Game.Players.Dashing;
@@ -240,7 +241,7 @@ namespace Tests.Tools.Builders
 
 	public sealed class CameraFollowBuilder : InterfacedBuilder<CameraFollow, ICameraFollow>
 	{
-		private FloatReference _smoothing;
+		private FloatReference _smoothing = new FloatReference(float.NaN);
 		private ITransformProvider _target;
 		private ITransformProvider _transformProvider;
 
@@ -252,7 +253,7 @@ namespace Tests.Tools.Builders
 
 		public CameraFollowBuilder WithSmoothing(float smoothing)
 		{
-			_smoothing = new FloatReference(smoothing);
+			_smoothing.Value = smoothing;
 			return this;
 		}
 
@@ -280,6 +281,7 @@ namespace Tests.Tools.Builders
 			return this;
 		}
 
-		protected override CameraFollow Build() => new CameraFollow(_smoothing, _transformProvider, _target);
+		protected override CameraFollow Build() =>
+			new CameraFollow(_smoothing, _transformProvider, new TransformProviderReference(_target));
 	}
 }

@@ -173,7 +173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _createInstanceOnAwake: 1
-  _target: {fileID: 333331479}
+  _target:
+    _value: {fileID: 333331479}
   _smoothing:
     _value: 20
 --- !u!20 &519420031
