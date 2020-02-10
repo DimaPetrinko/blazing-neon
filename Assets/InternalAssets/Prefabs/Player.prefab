@@ -96,11 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75706e0a57cc4a42bacb9de3777b617d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 1
-  inputBehaviourComponent: {fileID: 8811620541293805781}
-  movementBehaviourComponent: {fileID: 2916744821259527052}
-  dashingBehaviourComponent: {fileID: 6393209862440407574}
-  lookingBehaviourComponent: {fileID: 1179294869672044247}
+  _createInstanceOnAwake: 1
+  _inputBehaviourComponent: {fileID: 8811620541293805781}
+  _movementBehaviourComponent: {fileID: 2916744821259527052}
+  _dashingBehaviourComponent: {fileID: 6393209862440407574}
+  _lookingBehaviourComponent: {fileID: 1179294869672044247}
 --- !u!114 &8811620541293805781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e343b20b85e941c487bd8d5866a190e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 0
+  _createInstanceOnAwake: 0
 --- !u!114 &1179294869672044247
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c737f0781f4103b06988c012148ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 0
-  cam: {fileID: 0}
+  _createInstanceOnAwake: 0
+  _cam: {fileID: 0}
 --- !u!114 &2916744821259527052
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,8 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9709a7a8bb6c4d71ad8ac9d8073cd5f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 0
-  speed: 10
+  _createInstanceOnAwake: 0
+  _speed: 10
 --- !u!114 &6393209862440407574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,11 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5dbb5710333941c09a2cfe0664c745f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  createInstanceOnAwake: 0
-  distance: 3.5
-  speed: 25
-  cooldown: 0.7
-  movementCurve:
+  _createInstanceOnAwake: 0
+  _distance: 3.5
+  _speed: 25
+  _cooldown: 0.7
+  _movementCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3

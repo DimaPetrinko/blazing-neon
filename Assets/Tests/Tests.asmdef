@@ -15,6 +15,7 @@
     "precompiledReferences": [
         "nunit.framework.dll",
         "NSubstitute.dll",
+        "Castle.Core.dll",
         "System.Threading.Tasks.Extensions.dll"
     ],
     "autoReferenced": false,
